@@ -25,7 +25,7 @@ export default function IdealWeightCalculatorPage() {
       : 49 + 1.7 * (h - 152.4) / 2.54;
 
     const miller = gender === 'male'
-      : 56.2 + 1.41 * (h - 152.4) / 2.54
+      ? 56.2 + 1.41 * (h - 152.4) / 2.54
       : 53.1 + 1.36 * (h - 152.4) / 2.54;
 
     const devine = gender === 'male'
