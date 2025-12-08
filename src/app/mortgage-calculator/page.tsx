@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { CalculatorLayout } from '@/components/calculator-layout';
+import { PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 interface AmortizationRow {
   month: number;
@@ -150,7 +151,7 @@ export default function MortgageCalculatorPage() {
   };
 
   return (
-    <CalculatorLayout title="Mortgage Calculator" description="Calculate your monthly mortgage payment with taxes, insurance, PMI, and HOA fees. View detailed amortization schedule.">
+    <CalculatorLayout title="Mortgage Calculator" description="Calculate your monthly mortgage payment with taxes, insurance, PMI, and HOA fees. View detailed amortization schedule with interactive charts.">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Input Section */}
         <div className="space-y-4">
@@ -306,7 +307,7 @@ export default function MortgageCalculatorPage() {
 
           <button
             onClick={calculate}
-            className="w-full bg-accent text-white px-6 py-3 rounded-[3px] hover:bg-[#406b88] transition-colors font-bold"
+            className="w-full bg-accent text-white px-6 py-3 rounded-[3px] hover:bg-[#7c4ee4] transition-colors font-bold"
           >
             Calculate
           </button>
@@ -353,6 +354,66 @@ export default function MortgageCalculatorPage() {
                 </div>
               </div>
 
+              {/* Payment Breakdown Donut Chart */}
+              <div className="bg-card p-4 rounded-[3px] border border-border">
+                <h3 className="font-bold text-base mb-3">Monthly Payment Breakdown</h3>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Principal & Interest', value: parseFloat(result.monthlyPayment), color: '#6366f1' },
+                          { name: 'Property Tax', value: parseFloat(result.monthlyPropertyTax), color: '#10b981' },
+                          { name: 'Home Insurance', value: parseFloat(result.monthlyInsurance), color: '#f59e0b' },
+                          { name: 'Other Costs', value: parseFloat(result.monthlyPMI) + parseFloat(result.monthlyHOA), color: '#06b6d4' }
+                        ].filter(item => item.value > 0)}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={90}
+                        paddingAngle={2}
+                        dataKey="value"
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {[
+                          { name: 'Principal & Interest', value: parseFloat(result.monthlyPayment), color: '#6366f1' },
+                          { name: 'Property Tax', value: parseFloat(result.monthlyPropertyTax), color: '#10b981' },
+                          { name: 'Home Insurance', value: parseFloat(result.monthlyInsurance), color: '#f59e0b' },
+                          { name: 'Other Costs', value: parseFloat(result.monthlyPMI) + parseFloat(result.monthlyHOA), color: '#06b6d4' }
+                        ].filter(item => item.value > 0).map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(value) => formatCurrency(value as number)} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="grid grid-cols-2 gap-2 mt-4 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#6366f1' }}></div>
+                    <span>Principal & Interest</span>
+                  </div>
+                  {parseFloat(result.monthlyPropertyTax) > 0 && (
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#10b981' }}></div>
+                      <span>Property Tax</span>
+                    </div>
+                  )}
+                  {parseFloat(result.monthlyInsurance) > 0 && (
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#f59e0b' }}></div>
+                      <span>Home Insurance</span>
+                    </div>
+                  )}
+                  {(parseFloat(result.monthlyPMI) + parseFloat(result.monthlyHOA)) > 0 && (
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#06b6d4' }}></div>
+                      <span>Other Costs</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div className="bg-card p-4 rounded-[3px] border border-border">
                 <h3 className="font-bold text-base mb-3">Loan Summary</h3>
                 <div className="space-y-2 text-sm">
@@ -386,12 +447,11 @@ export default function MortgageCalculatorPage() {
               </div>
 
               <div className="bg-card p-4 rounded-[3px] border border-border">
-                <h3 className="font-bold text-base mb-3">Payment Breakdown</h3>
+                <h3 className="font-bold text-base mb-3">Total Payment Breakdown</h3>
                 <div className="space-y-2">
-                  {/* Visual bar representation */}
                   <div className="h-8 flex rounded-[3px] overflow-hidden">
                     <div 
-                      className="bg-accent flex items-center justify-center text-xs text-white"
+                      className="bg-accent flex items-center justify-center text-xs text-white font-medium"
                       style={{ 
                         width: `${(parseFloat(result.loanAmount) / parseFloat(result.totalPayment)) * 100}%` 
                       }}
@@ -399,7 +459,7 @@ export default function MortgageCalculatorPage() {
                       Principal
                     </div>
                     <div 
-                      className="bg-destructive flex items-center justify-center text-xs text-white"
+                      className="bg-destructive flex items-center justify-center text-xs text-white font-medium"
                       style={{ 
                         width: `${(parseFloat(result.totalInterest) / parseFloat(result.totalPayment)) * 100}%` 
                       }}
@@ -421,44 +481,100 @@ export default function MortgageCalculatorPage() {
               </div>
 
               {amortizationSchedule.length > 0 && (
-                <div className="bg-card p-4 rounded-[3px] border border-border">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-bold text-base">Amortization Schedule</h3>
-                    <button
-                      onClick={() => setShowSchedule(!showSchedule)}
-                      className="text-sm text-accent hover:text-accent/80 font-semibold"
-                    >
-                      {showSchedule ? 'Hide' : 'Show'} Schedule
-                    </button>
-                  </div>
-                  
-                  {showSchedule && (
-                    <div className="overflow-x-auto max-h-96 overflow-y-auto">
-                      <table className="w-full text-sm">
-                        <thead className="bg-muted sticky top-0">
-                          <tr>
-                            <th className="text-left p-2 font-bold">Month</th>
-                            <th className="text-right p-2 font-bold">Payment</th>
-                            <th className="text-right p-2 font-bold">Principal</th>
-                            <th className="text-right p-2 font-bold">Interest</th>
-                            <th className="text-right p-2 font-bold">Balance</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {amortizationSchedule.map((row, index) => (
-                            <tr key={index} className="border-t border-border hover:bg-muted/50">
-                              <td className="p-2">{row.month}</td>
-                              <td className="p-2 text-right">{formatCurrency(row.payment)}</td>
-                              <td className="p-2 text-right">{formatCurrency(row.principal)}</td>
-                              <td className="p-2 text-right">{formatCurrency(row.interest)}</td>
-                              <td className="p-2 text-right font-semibold">{formatCurrency(row.balance)}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                <>
+                  {/* Amortization Chart */}
+                  <div className="bg-card p-4 rounded-[3px] border border-border">
+                    <h3 className="font-bold text-base mb-3">Amortization Chart</h3>
+                    <div className="h-80">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart 
+                          data={amortizationSchedule.filter((_, idx) => idx % Math.ceil(amortizationSchedule.length / 100) === 0)}
+                          margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+                        >
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                          <XAxis 
+                            dataKey="month" 
+                            label={{ value: 'Month', position: 'insideBottom', offset: -5 }}
+                            tick={{ fontSize: 12 }}
+                          />
+                          <YAxis 
+                            tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                            tick={{ fontSize: 12 }}
+                          />
+                          <Tooltip 
+                            formatter={(value) => formatCurrency(value as number)}
+                            labelFormatter={(label) => `Month ${label}`}
+                          />
+                          <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                          <Line 
+                            type="monotone" 
+                            dataKey="balance" 
+                            stroke="#6366f1" 
+                            name="Balance"
+                            strokeWidth={2}
+                            dot={false}
+                          />
+                          <Line 
+                            type="monotone" 
+                            dataKey="totalInterest" 
+                            stroke="#10b981" 
+                            name="Total Interest"
+                            strokeWidth={2}
+                            dot={false}
+                          />
+                          <Line 
+                            type="monotone" 
+                            dataKey="payment" 
+                            stroke="#f59e0b" 
+                            name="Monthly Payment"
+                            strokeWidth={2}
+                            dot={false}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
                     </div>
-                  )}
-                </div>
+                  </div>
+
+                  {/* Amortization Schedule Table */}
+                  <div className="bg-card p-4 rounded-[3px] border border-border">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="font-bold text-base">Amortization Schedule</h3>
+                      <button
+                        onClick={() => setShowSchedule(!showSchedule)}
+                        className="text-sm text-accent hover:text-accent/80 font-semibold"
+                      >
+                        {showSchedule ? 'Hide' : 'Show'} Schedule
+                      </button>
+                    </div>
+                    
+                    {showSchedule && (
+                      <div className="overflow-x-auto max-h-96 overflow-y-auto">
+                        <table className="w-full text-sm">
+                          <thead className="bg-muted sticky top-0">
+                            <tr>
+                              <th className="text-left p-2 font-bold">Month</th>
+                              <th className="text-right p-2 font-bold">Payment</th>
+                              <th className="text-right p-2 font-bold">Principal</th>
+                              <th className="text-right p-2 font-bold">Interest</th>
+                              <th className="text-right p-2 font-bold">Balance</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {amortizationSchedule.map((row, index) => (
+                              <tr key={index} className="border-t border-border hover:bg-muted/50">
+                                <td className="p-2">{row.month}</td>
+                                <td className="p-2 text-right">{formatCurrency(row.payment)}</td>
+                                <td className="p-2 text-right">{formatCurrency(row.principal)}</td>
+                                <td className="p-2 text-right">{formatCurrency(row.interest)}</td>
+                                <td className="p-2 text-right font-semibold">{formatCurrency(row.balance)}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                </>
               )}
             </>
           ) : (
