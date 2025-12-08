@@ -6,10 +6,21 @@ import { PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis
 
 interface AmortizationRow {
   month: number;
+  date: string;
   payment: number;
   principal: number;
   interest: number;
   totalInterest: number;
+  balance: number;
+}
+
+interface AnnualRow {
+  year: number;
+  startDate: string;
+  endDate: string;
+  principalPaid: number;
+  interestPaid: number;
+  totalPaid: number;
   balance: number;
 }
 
@@ -27,7 +38,8 @@ export default function MortgageCalculatorPage() {
   
   const [result, setResult] = useState<any>(null);
   const [amortizationSchedule, setAmortizationSchedule] = useState<AmortizationRow[]>([]);
-  const [showSchedule, setShowSchedule] = useState(false);
+  const [annualSchedule, setAnnualSchedule] = useState<AnnualRow[]>([]);
+  const [scheduleView, setScheduleView] = useState<'annual' | 'monthly'>('annual');
 
   const updateDownPayment = (price: string, percent: string) => {
     const p = parseFloat(price) || 0;
@@ -43,6 +55,19 @@ export default function MortgageCalculatorPage() {
       const pct = (d / p) * 100;
       setDownPaymentPercent(pct.toFixed(2));
     }
+  };
+
+  const getMonthDate = (start: string, monthOffset: number): string => {
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const [monthStr, yearStr] = start.split(' ');
+    const startMonth = monthNames.indexOf(monthStr);
+    const startYear = parseInt(yearStr);
+    
+    const totalMonths = startMonth + monthOffset;
+    const targetYear = startYear + Math.floor(totalMonths / 12);
+    const targetMonth = totalMonths % 12;
+    
+    return `${monthNames[targetMonth]} ${targetYear}`;
   };
 
   const calculate = () => {
@@ -102,9 +127,14 @@ export default function MortgageCalculatorPage() {
   };
 
   const generateAmortizationSchedule = (principal: number, monthlyRate: number, months: number, payment: number) => {
-    const schedule: AmortizationRow[] = [];
+    const monthlySchedule: AmortizationRow[] = [];
+    const annualSchedule: AnnualRow[] = [];
     let balance = principal;
     let cumulativeInterest = 0;
+    let yearlyPrincipal = 0;
+    let yearlyInterest = 0;
+    
+    const years = Math.ceil(months / 12);
 
     for (let i = 1; i <= months; i++) {
       const interestPayment = balance * monthlyRate;
@@ -114,30 +144,46 @@ export default function MortgageCalculatorPage() {
 
       if (balance < 0) balance = 0;
 
-      schedule.push({
+      yearlyPrincipal += principalPayment;
+      yearlyInterest += interestPayment;
+
+      monthlySchedule.push({
         month: i,
+        date: getMonthDate(startDate, i - 1),
         payment: payment,
         principal: principalPayment,
         interest: interestPayment,
         totalInterest: cumulativeInterest,
         balance: balance
       });
+
+      // At end of year or end of loan
+      if (i % 12 === 0 || i === months) {
+        const yearNumber = Math.ceil(i / 12);
+        const yearStartMonth = (yearNumber - 1) * 12;
+        const yearEndMonth = Math.min(i, months);
+        
+        annualSchedule.push({
+          year: yearNumber,
+          startDate: getMonthDate(startDate, yearStartMonth),
+          endDate: getMonthDate(startDate, yearEndMonth - 1),
+          principalPaid: yearlyPrincipal,
+          interestPaid: yearlyInterest,
+          totalPaid: yearlyPrincipal + yearlyInterest,
+          balance: balance
+        });
+
+        yearlyPrincipal = 0;
+        yearlyInterest = 0;
+      }
     }
 
-    setAmortizationSchedule(schedule);
+    setAmortizationSchedule(monthlySchedule);
+    setAnnualSchedule(annualSchedule);
   };
 
   const calculatePayoffDate = (start: string, months: number) => {
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const [monthStr, yearStr] = start.split(' ');
-    const startMonth = monthNames.indexOf(monthStr);
-    const startYear = parseInt(yearStr);
-    
-    const totalMonths = startMonth + months;
-    const endYear = startYear + Math.floor(totalMonths / 12);
-    const endMonth = totalMonths % 12;
-    
-    return `${monthNames[endMonth]} ${endYear}`;
+    return getMonthDate(start, months);
   };
 
   const formatCurrency = (value: string | number) => {
@@ -534,46 +580,6 @@ export default function MortgageCalculatorPage() {
                       </ResponsiveContainer>
                     </div>
                   </div>
-
-                  {/* Amortization Schedule Table */}
-                  <div className="bg-card p-4 rounded-[3px] border border-border">
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="font-bold text-base">Amortization Schedule</h3>
-                      <button
-                        onClick={() => setShowSchedule(!showSchedule)}
-                        className="text-sm text-accent hover:text-accent/80 font-semibold"
-                      >
-                        {showSchedule ? 'Hide' : 'Show'} Schedule
-                      </button>
-                    </div>
-                    
-                    {showSchedule && (
-                      <div className="overflow-x-auto max-h-96 overflow-y-auto">
-                        <table className="w-full text-sm">
-                          <thead className="bg-muted sticky top-0">
-                            <tr>
-                              <th className="text-left p-2 font-bold">Month</th>
-                              <th className="text-right p-2 font-bold">Payment</th>
-                              <th className="text-right p-2 font-bold">Principal</th>
-                              <th className="text-right p-2 font-bold">Interest</th>
-                              <th className="text-right p-2 font-bold">Balance</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {amortizationSchedule.map((row, index) => (
-                              <tr key={index} className="border-t border-border hover:bg-muted/50">
-                                <td className="p-2">{row.month}</td>
-                                <td className="p-2 text-right">{formatCurrency(row.payment)}</td>
-                                <td className="p-2 text-right">{formatCurrency(row.principal)}</td>
-                                <td className="p-2 text-right">{formatCurrency(row.interest)}</td>
-                                <td className="p-2 text-right font-semibold">{formatCurrency(row.balance)}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
                 </>
               )}
             </>
@@ -584,6 +590,95 @@ export default function MortgageCalculatorPage() {
           )}
         </div>
       </div>
+
+      {/* Amortization Schedule - Full Width Below */}
+      {result && amortizationSchedule.length > 0 && (
+        <div className="mt-8">
+          <div className="bg-card rounded-[3px] border border-border overflow-hidden">
+            <h3 className="font-bold text-lg p-4 border-b border-border">Amortization Schedule</h3>
+            
+            {/* Tabs */}
+            <div className="flex border-b border-border">
+              <button
+                onClick={() => setScheduleView('annual')}
+                className={`px-6 py-3 font-semibold text-sm transition-colors ${
+                  scheduleView === 'annual'
+                    ? 'bg-[#4a7c9e] text-white'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                }`}
+              >
+                Annual Schedule
+              </button>
+              <button
+                onClick={() => setScheduleView('monthly')}
+                className={`px-6 py-3 font-semibold text-sm transition-colors ${
+                  scheduleView === 'monthly'
+                    ? 'bg-[#4a7c9e] text-white'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                }`}
+              >
+                Monthly Schedule
+              </button>
+            </div>
+
+            {/* Annual Schedule */}
+            {scheduleView === 'annual' && (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-[#4a7c9e] text-white">
+                    <tr>
+                      <th className="text-left p-3 font-bold">Year</th>
+                      <th className="text-left p-3 font-bold">Date Range</th>
+                      <th className="text-right p-3 font-bold">Interest</th>
+                      <th className="text-right p-3 font-bold">Principal</th>
+                      <th className="text-right p-3 font-bold">Ending Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {annualSchedule.map((row, index) => (
+                      <tr key={index} className="border-t border-border hover:bg-muted/50">
+                        <td className="p-3">{row.year}</td>
+                        <td className="p-3">{row.startDate} - {row.endDate}</td>
+                        <td className="p-3 text-right">{formatCurrency(row.interestPaid)}</td>
+                        <td className="p-3 text-right">{formatCurrency(row.principalPaid)}</td>
+                        <td className="p-3 text-right font-semibold">{formatCurrency(row.balance)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* Monthly Schedule */}
+            {scheduleView === 'monthly' && (
+              <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-[#4a7c9e] text-white sticky top-0">
+                    <tr>
+                      <th className="text-left p-3 font-bold">Month</th>
+                      <th className="text-left p-3 font-bold">Date</th>
+                      <th className="text-right p-3 font-bold">Interest</th>
+                      <th className="text-right p-3 font-bold">Principal</th>
+                      <th className="text-right p-3 font-bold">Ending Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {amortizationSchedule.map((row, index) => (
+                      <tr key={index} className="border-t border-border hover:bg-muted/50">
+                        <td className="p-3">{row.month}</td>
+                        <td className="p-3">{row.date}</td>
+                        <td className="p-3 text-right">{formatCurrency(row.interest)}</td>
+                        <td className="p-3 text-right">{formatCurrency(row.principal)}</td>
+                        <td className="p-3 text-right font-semibold">{formatCurrency(row.balance)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </CalculatorLayout>
   );
 }
