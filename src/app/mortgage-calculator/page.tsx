@@ -363,38 +363,103 @@ export default function MortgageCalculatorPage() {
         <div className="space-y-4">
           {result ? (
             <>
+              {/* Primary Result */}
               <div className="bg-card p-5 rounded-[3px] border-2 border-accent">
-                <h3 className="font-bold text-lg mb-4 text-accent">Monthly Payment</h3>
-                <div className="text-4xl font-bold text-foreground mb-4">
+                <h3 className="font-bold text-lg mb-2 text-accent">Monthly Pay:</h3>
+                <div className="text-4xl font-bold text-foreground">
                   {formatCurrency(result.totalMonthly)}
                 </div>
-                <div className="space-y-2 text-sm border-t border-border pt-3">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Mortgage Payment:</span>
-                    <span className="font-semibold">{formatCurrency(result.monthlyPayment)}</span>
+              </div>
+
+              {/* Monthly vs Total Comparison Table */}
+              <div className="bg-card rounded-[3px] border border-border overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead className="bg-[#4a7c9e] text-white">
+                    <tr>
+                      <th className="text-left p-3 font-bold">Payment Breakdown</th>
+                      <th className="text-right p-3 font-bold">Monthly</th>
+                      <th className="text-right p-3 font-bold">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-t border-border hover:bg-muted/50">
+                      <td className="p-3 font-medium">Mortgage Payment</td>
+                      <td className="p-3 text-right font-semibold">{formatCurrency(result.monthlyPayment)}</td>
+                      <td className="p-3 text-right font-semibold">{formatCurrency(result.totalPayment)}</td>
+                    </tr>
+                    {parseFloat(result.monthlyPropertyTax) > 0 && (
+                      <tr className="border-t border-border hover:bg-muted/50">
+                        <td className="p-3 font-medium">Property Tax</td>
+                        <td className="p-3 text-right font-semibold">{formatCurrency(result.monthlyPropertyTax)}</td>
+                        <td className="p-3 text-right font-semibold">{formatCurrency(parseFloat(result.monthlyPropertyTax) * parseFloat(loanTerm) * 12)}</td>
+                      </tr>
+                    )}
+                    {parseFloat(result.monthlyInsurance) > 0 && (
+                      <tr className="border-t border-border hover:bg-muted/50">
+                        <td className="p-3 font-medium">Home Insurance</td>
+                        <td className="p-3 text-right font-semibold">{formatCurrency(result.monthlyInsurance)}</td>
+                        <td className="p-3 text-right font-semibold">{formatCurrency(parseFloat(result.monthlyInsurance) * parseFloat(loanTerm) * 12)}</td>
+                      </tr>
+                    )}
+                    {parseFloat(result.monthlyPMI) > 0 && (
+                      <tr className="border-t border-border hover:bg-muted/50">
+                        <td className="p-3 font-medium">PMI</td>
+                        <td className="p-3 text-right font-semibold">{formatCurrency(result.monthlyPMI)}</td>
+                        <td className="p-3 text-right font-semibold">{formatCurrency(parseFloat(result.monthlyPMI) * parseFloat(loanTerm) * 12)}</td>
+                      </tr>
+                    )}
+                    {parseFloat(result.monthlyHOA) > 0 && (
+                      <tr className="border-t border-border hover:bg-muted/50">
+                        <td className="p-3 font-medium">HOA Fee</td>
+                        <td className="p-3 text-right font-semibold">{formatCurrency(result.monthlyHOA)}</td>
+                        <td className="p-3 text-right font-semibold">{formatCurrency(parseFloat(result.monthlyHOA) * parseFloat(loanTerm) * 12)}</td>
+                      </tr>
+                    )}
+                    <tr className="border-t-2 border-border bg-muted/30">
+                      <td className="p-3 font-bold">Total Out-of-Pocket</td>
+                      <td className="p-3 text-right font-bold text-accent">{formatCurrency(result.totalMonthly)}</td>
+                      <td className="p-3 text-right font-bold text-accent">
+                        {formatCurrency(
+                          parseFloat(result.totalPayment) +
+                          (parseFloat(result.monthlyPropertyTax) * parseFloat(loanTerm) * 12) +
+                          (parseFloat(result.monthlyInsurance) * parseFloat(loanTerm) * 12) +
+                          (parseFloat(result.monthlyPMI) * parseFloat(loanTerm) * 12) +
+                          (parseFloat(result.monthlyHOA) * parseFloat(loanTerm) * 12)
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Key Financial Metrics */}
+              <div className="bg-card p-4 rounded-[3px] border border-border">
+                <h3 className="font-bold text-base mb-3">Loan Summary</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between py-1">
+                    <span className="text-muted-foreground">House Price:</span>
+                    <span className="font-semibold">{formatCurrency(homePrice)}</span>
                   </div>
-                  {parseFloat(result.monthlyPropertyTax) > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Property Tax:</span>
-                      <span className="font-semibold">{formatCurrency(result.monthlyPropertyTax)}</span>
-                    </div>
-                  )}
-                  {parseFloat(result.monthlyInsurance) > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Home Insurance:</span>
-                      <span className="font-semibold">{formatCurrency(result.monthlyInsurance)}</span>
-                    </div>
-                  )}
-                  {parseFloat(result.monthlyPMI) > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">PMI:</span>
-                      <span className="font-semibold">{formatCurrency(result.monthlyPMI)}</span>
-                    </div>
-                  )}
-                  {parseFloat(result.monthlyHOA) > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">HOA Fee:</span>
-                      <span className="font-semibold">{formatCurrency(result.monthlyHOA)}</span>
+                  <div className="flex justify-between py-1">
+                    <span className="text-muted-foreground">Loan Amount:</span>
+                    <span className="font-semibold">{formatCurrency(result.loanAmount)}</span>
+                  </div>
+                  <div className="flex justify-between py-1">
+                    <span className="text-muted-foreground">Down Payment:</span>
+                    <span className="font-semibold">{formatCurrency(result.downPayment)} ({result.downPaymentPercent}%)</span>
+                  </div>
+                  <div className="flex justify-between py-1">
+                    <span className="text-muted-foreground">Total of {parseFloat(loanTerm) * 12} Mortgage Payments:</span>
+                    <span className="font-semibold">{formatCurrency(result.totalPayment)}</span>
+                  </div>
+                  <div className="flex justify-between py-1">
+                    <span className="text-muted-foreground">Total Interest:</span>
+                    <span className="font-semibold text-destructive">{formatCurrency(result.totalInterest)}</span>
+                  </div>
+                  {result.payoffDate && (
+                    <div className="flex justify-between py-1">
+                      <span className="text-muted-foreground">Mortgage Payoff Date:</span>
+                      <span className="font-semibold">{result.payoffDate}</span>
                     </div>
                   )}
                 </div>
@@ -408,10 +473,11 @@ export default function MortgageCalculatorPage() {
                     <PieChart>
                       <Pie
                         data={[
-                          { name: 'Principal & Interest', value: parseFloat(result.monthlyPayment), color: '#6366f1' },
+                          { name: 'Mortgage Payment', value: parseFloat(result.monthlyPayment), color: '#6366f1' },
                           { name: 'Property Tax', value: parseFloat(result.monthlyPropertyTax), color: '#10b981' },
                           { name: 'Home Insurance', value: parseFloat(result.monthlyInsurance), color: '#f59e0b' },
-                          { name: 'Other Costs', value: parseFloat(result.monthlyPMI) + parseFloat(result.monthlyHOA), color: '#06b6d4' }
+                          { name: 'PMI', value: parseFloat(result.monthlyPMI), color: '#06b6d4' },
+                          { name: 'HOA Fee', value: parseFloat(result.monthlyHOA), color: '#8b5cf6' }
                         ].filter(item => item.value > 0)}
                         cx="50%"
                         cy="50%"
@@ -419,13 +485,14 @@ export default function MortgageCalculatorPage() {
                         outerRadius={90}
                         paddingAngle={2}
                         dataKey="value"
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
                       >
                         {[
-                          { name: 'Principal & Interest', value: parseFloat(result.monthlyPayment), color: '#6366f1' },
+                          { name: 'Mortgage Payment', value: parseFloat(result.monthlyPayment), color: '#6366f1' },
                           { name: 'Property Tax', value: parseFloat(result.monthlyPropertyTax), color: '#10b981' },
                           { name: 'Home Insurance', value: parseFloat(result.monthlyInsurance), color: '#f59e0b' },
-                          { name: 'Other Costs', value: parseFloat(result.monthlyPMI) + parseFloat(result.monthlyHOA), color: '#06b6d4' }
+                          { name: 'PMI', value: parseFloat(result.monthlyPMI), color: '#06b6d4' },
+                          { name: 'HOA Fee', value: parseFloat(result.monthlyHOA), color: '#8b5cf6' }
                         ].filter(item => item.value > 0).map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
@@ -437,7 +504,7 @@ export default function MortgageCalculatorPage() {
                 <div className="grid grid-cols-2 gap-2 mt-4 text-xs">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#6366f1' }}></div>
-                    <span>Principal & Interest</span>
+                    <span>Mortgage Payment</span>
                   </div>
                   {parseFloat(result.monthlyPropertyTax) > 0 && (
                     <div className="flex items-center gap-2">
@@ -451,47 +518,22 @@ export default function MortgageCalculatorPage() {
                       <span>Home Insurance</span>
                     </div>
                   )}
-                  {(parseFloat(result.monthlyPMI) + parseFloat(result.monthlyHOA)) > 0 && (
+                  {parseFloat(result.monthlyPMI) > 0 && (
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#06b6d4' }}></div>
-                      <span>Other Costs</span>
+                      <span>PMI</span>
+                    </div>
+                  )}
+                  {parseFloat(result.monthlyHOA) > 0 && (
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#8b5cf6' }}></div>
+                      <span>HOA Fee</span>
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="bg-card p-4 rounded-[3px] border border-border">
-                <h3 className="font-bold text-base mb-3">Loan Summary</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between py-1">
-                    <span className="text-muted-foreground">Home Price:</span>
-                    <span className="font-semibold">{formatCurrency(homePrice)}</span>
-                  </div>
-                  <div className="flex justify-between py-1">
-                    <span className="text-muted-foreground">Down Payment:</span>
-                    <span className="font-semibold">{formatCurrency(result.downPayment)} ({result.downPaymentPercent}%)</span>
-                  </div>
-                  <div className="flex justify-between py-1 border-t border-border">
-                    <span className="text-muted-foreground font-bold">Loan Amount:</span>
-                    <span className="font-bold">{formatCurrency(result.loanAmount)}</span>
-                  </div>
-                  <div className="flex justify-between py-1">
-                    <span className="text-muted-foreground">Total Interest:</span>
-                    <span className="font-semibold text-destructive">{formatCurrency(result.totalInterest)}</span>
-                  </div>
-                  <div className="flex justify-between py-1 border-t border-border">
-                    <span className="text-muted-foreground font-bold">Total Payment:</span>
-                    <span className="font-bold">{formatCurrency(result.totalPayment)}</span>
-                  </div>
-                  {result.payoffDate && (
-                    <div className="flex justify-between py-1">
-                      <span className="text-muted-foreground">Payoff Date:</span>
-                      <span className="font-semibold">{result.payoffDate}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
+              {/* Total Payment Breakdown Bar */}
               <div className="bg-card p-4 rounded-[3px] border border-border">
                 <h3 className="font-bold text-base mb-3">Total Payment Breakdown</h3>
                 <div className="space-y-2">
@@ -526,61 +568,51 @@ export default function MortgageCalculatorPage() {
                 </div>
               </div>
 
+              {/* Amortization Chart */}
               {amortizationSchedule.length > 0 && (
-                <>
-                  {/* Amortization Chart */}
-                  <div className="bg-card p-4 rounded-[3px] border border-border">
-                    <h3 className="font-bold text-base mb-3">Amortization Chart</h3>
-                    <div className="h-80">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <LineChart 
-                          data={amortizationSchedule.filter((_, idx) => idx % Math.ceil(amortizationSchedule.length / 100) === 0)}
-                          margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
-                        >
-                          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                          <XAxis 
-                            dataKey="month" 
-                            label={{ value: 'Month', position: 'insideBottom', offset: -5 }}
-                            tick={{ fontSize: 12 }}
-                          />
-                          <YAxis 
-                            tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
-                            tick={{ fontSize: 12 }}
-                          />
-                          <Tooltip 
-                            formatter={(value) => formatCurrency(value as number)}
-                            labelFormatter={(label) => `Month ${label}`}
-                          />
-                          <Legend wrapperStyle={{ paddingTop: '20px' }} />
-                          <Line 
-                            type="monotone" 
-                            dataKey="balance" 
-                            stroke="#6366f1" 
-                            name="Balance"
-                            strokeWidth={2}
-                            dot={false}
-                          />
-                          <Line 
-                            type="monotone" 
-                            dataKey="totalInterest" 
-                            stroke="#10b981" 
-                            name="Total Interest"
-                            strokeWidth={2}
-                            dot={false}
-                          />
-                          <Line 
-                            type="monotone" 
-                            dataKey="payment" 
-                            stroke="#f59e0b" 
-                            name="Monthly Payment"
-                            strokeWidth={2}
-                            dot={false}
-                          />
-                        </LineChart>
-                      </ResponsiveContainer>
-                    </div>
+                <div className="bg-card p-4 rounded-[3px] border border-border">
+                  <h3 className="font-bold text-base mb-3">Balance Over Time</h3>
+                  <div className="h-80">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart 
+                        data={amortizationSchedule.filter((_, idx) => idx % Math.ceil(amortizationSchedule.length / 100) === 0)}
+                        margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                        <XAxis 
+                          dataKey="month" 
+                          label={{ value: 'Month', position: 'insideBottom', offset: -5 }}
+                          tick={{ fontSize: 12 }}
+                        />
+                        <YAxis 
+                          tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                          tick={{ fontSize: 12 }}
+                        />
+                        <Tooltip 
+                          formatter={(value) => formatCurrency(value as number)}
+                          labelFormatter={(label) => `Month ${label}`}
+                        />
+                        <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                        <Line 
+                          type="monotone" 
+                          dataKey="balance" 
+                          stroke="#6366f1" 
+                          name="Balance"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="totalInterest" 
+                          stroke="#10b981" 
+                          name="Total Interest"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
                   </div>
-                </>
+                </div>
               )}
             </>
           ) : (
