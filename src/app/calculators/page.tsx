@@ -236,7 +236,7 @@ export default function CalculatorsPage() {
     setActiveTab(id);
     const element = document.getElementById(id);
     if (element) {
-      const offset = 160;
+      const offset = 140;
       const top = element.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top, behavior: 'smooth' });
     }
@@ -250,14 +250,14 @@ export default function CalculatorsPage() {
   return (
     <div className="min-h-screen bg-[#dce4e8]">
       <Header />
-      <main className="pt-[80px] pb-16 px-4">
+      <main className="pt-[64px] pb-16 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="bg-white rounded-lg shadow-sm p-8 mb-6">
+          <div className="bg-white rounded-lg shadow-sm p-8">
             <h1 className="text-3xl font-bold mb-2 text-[#333] text-center">All Calculators</h1>
             <p className="text-[#666] text-center text-sm">Browse our complete collection of free online calculators</p>
           </div>
           
-          <div className="sticky top-[80px] z-40 bg-[#dce4e8] -mx-4 px-4 pt-0">
+          <div className="sticky top-[64px] z-40 -mx-4 px-4 bg-[#dce4e8]">
             <div className="bg-white rounded-lg shadow-sm py-4 px-6">
               <div className="flex flex-wrap justify-center gap-3">
                 {tabs.map((tab) => (
@@ -277,7 +277,7 @@ export default function CalculatorsPage() {
             </div>
           </div>
           
-          <div className="h-3"></div>
+          <div className="h-4"></div>
           
           <div id="financial" className="mb-8">
             <div className="bg-white rounded-lg shadow-sm p-6">
