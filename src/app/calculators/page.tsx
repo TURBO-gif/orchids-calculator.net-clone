@@ -248,49 +248,47 @@ export default function CalculatorsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#dce4e8]">
+    <div className="min-h-screen bg-[#1a1f2e]">
       <Header />
-      <main className="pt-[64px] pb-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-white rounded-lg shadow-sm p-8">
-            <h1 className="text-3xl font-bold mb-2 text-[#333] text-center">All Calculators</h1>
-            <p className="text-[#666] text-center text-sm">Browse our complete collection of free online calculators</p>
+      <main className="pt-[64px] pb-16">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="py-6">
+            <h1 className="text-3xl font-bold mb-2 text-white text-center">All Calculators</h1>
+            <p className="text-gray-400 text-center text-sm">Browse our complete collection of free online calculators</p>
           </div>
           
-          <div className="sticky top-[64px] z-40 -mx-4 px-4 bg-[#dce4e8]">
-            <div className="bg-white rounded-lg shadow-sm py-4 px-6">
-              <div className="flex flex-wrap justify-center gap-3">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => scrollToSection(tab.id)}
-                    style={{
-                      backgroundColor: activeTab === tab.id ? tab.color : '#f5f5f5',
-                      color: activeTab === tab.id ? '#fff' : '#555',
-                    }}
-                    className="px-6 py-2.5 rounded text-sm font-medium transition-all hover:opacity-90 border border-[#ddd]"
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
+          <div className="sticky top-[64px] z-40 bg-[#1a1f2e] -mx-4 px-4 py-3">
+            <div className="flex flex-wrap justify-center gap-3">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => scrollToSection(tab.id)}
+                  style={{
+                    backgroundColor: activeTab === tab.id ? tab.color : '#2d3344',
+                    color: activeTab === tab.id ? '#fff' : '#9ca3af',
+                  }}
+                  className="px-6 py-2.5 rounded text-sm font-medium transition-all hover:opacity-90"
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
           </div>
           
           <div className="h-4"></div>
           
           <div id="financial" className="mb-8">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-bold mb-6 text-[#2d8e2d] border-b border-[#e5e5e5] pb-3">Financial Calculators</h2>
+            <div className="bg-[#252b3b] rounded-lg p-6">
+              <h2 className="text-xl font-bold mb-6 text-[#2d8e2d] border-b border-[#3a4055] pb-3">Financial Calculators</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Object.entries(financialCalculators).map(([category, calcs]) => (
-                  <div key={category} className="border border-[#e5e5e5] rounded p-4 bg-[#fafafa]">
-                    <h3 className="font-semibold text-[15px] mb-3 text-[#333] border-b border-[#eee] pb-2">{category}</h3>
+                  <div key={category} className="border border-[#3a4055] rounded p-4 bg-[#1a1f2e]">
+                    <h3 className="font-semibold text-[15px] mb-3 text-gray-200 border-b border-[#3a4055] pb-2">{category}</h3>
                     <ul className="space-y-1.5">
                       {calcs.map((calc) => (
                         <li key={calc.href}>
-                          <Link href={calc.href} className="text-[13px] text-[#0066cc] hover:underline hover:text-[#004499] flex items-center gap-1.5">
-                            <span className="text-[#999]">•</span>
+                          <Link href={calc.href} className="text-[13px] text-[#60a5fa] hover:underline hover:text-[#93c5fd] flex items-center gap-1.5">
+                            <span className="text-gray-500">•</span>
                             {calc.name}
                           </Link>
                         </li>
@@ -303,17 +301,17 @@ export default function CalculatorsPage() {
           </div>
 
           <div id="fitness" className="mb-8">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-bold mb-6 text-[#c75050] border-b border-[#e5e5e5] pb-3">Fitness & Health Calculators</h2>
+            <div className="bg-[#252b3b] rounded-lg p-6">
+              <h2 className="text-xl font-bold mb-6 text-[#c75050] border-b border-[#3a4055] pb-3">Fitness & Health Calculators</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Object.entries(fitnessHealthCalculators).map(([category, calcs]) => (
-                  <div key={category} className="border border-[#e5e5e5] rounded p-4 bg-[#fafafa]">
-                    <h3 className="font-semibold text-[15px] mb-3 text-[#333] border-b border-[#eee] pb-2">{category}</h3>
+                  <div key={category} className="border border-[#3a4055] rounded p-4 bg-[#1a1f2e]">
+                    <h3 className="font-semibold text-[15px] mb-3 text-gray-200 border-b border-[#3a4055] pb-2">{category}</h3>
                     <ul className="space-y-1.5">
                       {calcs.map((calc) => (
                         <li key={calc.href}>
-                          <Link href={calc.href} className="text-[13px] text-[#0066cc] hover:underline hover:text-[#004499] flex items-center gap-1.5">
-                            <span className="text-[#999]">•</span>
+                          <Link href={calc.href} className="text-[13px] text-[#60a5fa] hover:underline hover:text-[#93c5fd] flex items-center gap-1.5">
+                            <span className="text-gray-500">•</span>
                             {calc.name}
                           </Link>
                         </li>
@@ -326,17 +324,17 @@ export default function CalculatorsPage() {
           </div>
 
           <div id="math" className="mb-8">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-bold mb-6 text-[#5a7bbf] border-b border-[#e5e5e5] pb-3">Math Calculators</h2>
+            <div className="bg-[#252b3b] rounded-lg p-6">
+              <h2 className="text-xl font-bold mb-6 text-[#5a7bbf] border-b border-[#3a4055] pb-3">Math Calculators</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Object.entries(mathCalculators).map(([category, calcs]) => (
-                  <div key={category} className="border border-[#e5e5e5] rounded p-4 bg-[#fafafa]">
-                    <h3 className="font-semibold text-[15px] mb-3 text-[#333] border-b border-[#eee] pb-2">{category}</h3>
+                  <div key={category} className="border border-[#3a4055] rounded p-4 bg-[#1a1f2e]">
+                    <h3 className="font-semibold text-[15px] mb-3 text-gray-200 border-b border-[#3a4055] pb-2">{category}</h3>
                     <ul className="space-y-1.5">
                       {calcs.map((calc) => (
                         <li key={calc.href}>
-                          <Link href={calc.href} className="text-[13px] text-[#0066cc] hover:underline hover:text-[#004499] flex items-center gap-1.5">
-                            <span className="text-[#999]">•</span>
+                          <Link href={calc.href} className="text-[13px] text-[#60a5fa] hover:underline hover:text-[#93c5fd] flex items-center gap-1.5">
+                            <span className="text-gray-500">•</span>
                             {calc.name}
                           </Link>
                         </li>
@@ -349,17 +347,17 @@ export default function CalculatorsPage() {
           </div>
 
           <div id="other">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-bold mb-6 text-[#8b6914] border-b border-[#e5e5e5] pb-3">Other Calculators</h2>
+            <div className="bg-[#252b3b] rounded-lg p-6">
+              <h2 className="text-xl font-bold mb-6 text-[#8b6914] border-b border-[#3a4055] pb-3">Other Calculators</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Object.entries(otherCalculators).map(([category, calcs]) => (
-                  <div key={category} className="border border-[#e5e5e5] rounded p-4 bg-[#fafafa]">
-                    <h3 className="font-semibold text-[15px] mb-3 text-[#333] border-b border-[#eee] pb-2">{category}</h3>
+                  <div key={category} className="border border-[#3a4055] rounded p-4 bg-[#1a1f2e]">
+                    <h3 className="font-semibold text-[15px] mb-3 text-gray-200 border-b border-[#3a4055] pb-2">{category}</h3>
                     <ul className="space-y-1.5">
                       {calcs.map((calc) => (
                         <li key={calc.href}>
-                          <Link href={calc.href} className="text-[13px] text-[#0066cc] hover:underline hover:text-[#004499] flex items-center gap-1.5">
-                            <span className="text-[#999]">•</span>
+                          <Link href={calc.href} className="text-[13px] text-[#60a5fa] hover:underline hover:text-[#93c5fd] flex items-center gap-1.5">
+                            <span className="text-gray-500">•</span>
                             {calc.name}
                           </Link>
                         </li>
