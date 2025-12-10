@@ -257,21 +257,23 @@ export default function CalculatorsPage() {
             <p className="text-[#666] text-center text-sm">Browse our complete collection of free online calculators</p>
           </div>
           
-          <div className="sticky top-[80px] z-40 bg-white rounded-lg shadow-sm py-4 px-6 mb-6">
-            <div className="flex flex-wrap justify-center gap-3">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => scrollToSection(tab.id)}
-                  style={{
-                    backgroundColor: activeTab === tab.id ? tab.color : '#f5f5f5',
-                    color: activeTab === tab.id ? '#fff' : '#555',
-                  }}
-                  className="px-6 py-2.5 rounded text-sm font-medium transition-all hover:opacity-90 border border-[#ddd]"
-                >
-                  {tab.label}
-                </button>
-              ))}
+          <div className="sticky top-[80px] z-40 bg-[#dce4e8] py-3 -mx-4 px-4 mb-6">
+            <div className="bg-white rounded-lg shadow-sm py-4 px-6">
+              <div className="flex flex-wrap justify-center gap-3">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => scrollToSection(tab.id)}
+                    style={{
+                      backgroundColor: activeTab === tab.id ? tab.color : '#f5f5f5',
+                      color: activeTab === tab.id ? '#fff' : '#555',
+                    }}
+                    className="px-6 py-2.5 rounded text-sm font-medium transition-all hover:opacity-90 border border-[#ddd]"
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
           
