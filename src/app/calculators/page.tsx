@@ -249,6 +249,7 @@ export default function CalculatorsPage() {
 
   return (
     <div className="min-h-screen bg-[#1a1f2e]">
+      <div className="fixed inset-0 bg-[#1a1f2e] -z-10"></div>
       <Header />
       <main className="pt-[64px] pb-16">
         <div className="max-w-6xl mx-auto px-4">
