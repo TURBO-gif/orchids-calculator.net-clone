@@ -65,6 +65,90 @@ const financialCalculators = {
   ],
 };
 
+const fitnessHealthCalculators = {
+  'Fitness': [
+    { name: 'BMI Calculator', href: '/bmi-calculator' },
+    { name: 'Calorie Calculator', href: '/calorie-calculator' },
+    { name: 'Body Fat Calculator', href: '/body-fat-calculator' },
+    { name: 'BMR Calculator', href: '/bmr-calculator' },
+    { name: 'Ideal Weight Calculator', href: '/ideal-weight-calculator' },
+    { name: 'Pace Calculator', href: '/pace-calculator' },
+    { name: 'Army Body Fat Calculator', href: '/army-body-fat-calculator' },
+    { name: 'Lean Body Mass Calculator', href: '/lean-body-mass-calculator' },
+    { name: 'Healthy Weight Calculator', href: '/healthy-weight-calculator' },
+    { name: 'Calories Burned Calculator', href: '/calories-burned-calculator' },
+    { name: 'One Rep Max Calculator', href: '/one-rep-max-calculator' },
+    { name: 'Target Heart Rate Calculator', href: '/target-heart-rate-calculator' },
+  ],
+  'Pregnancy': [
+    { name: 'Pregnancy Calculator', href: '/pregnancy-calculator' },
+    { name: 'Pregnancy Weight Gain Calculator', href: '/pregnancy-weight-gain-calculator' },
+    { name: 'Pregnancy Conception Calculator', href: '/pregnancy-conception-calculator' },
+    { name: 'Due Date Calculator', href: '/due-date-calculator' },
+    { name: 'Ovulation Calculator', href: '/ovulation-calculator' },
+    { name: 'Conception Calculator', href: '/conception-calculator' },
+    { name: 'Period Calculator', href: '/period-calculator' },
+  ],
+  'Other Health': [
+    { name: 'Macro Calculator', href: '/macro-calculator' },
+    { name: 'Carbohydrate Calculator', href: '/carbohydrate-calculator' },
+    { name: 'Protein Calculator', href: '/protein-calculator' },
+    { name: 'Fat Intake Calculator', href: '/fat-intake-calculator' },
+    { name: 'TDEE Calculator', href: '/tdee-calculator' },
+    { name: 'GFR Calculator', href: '/gfr-calculator' },
+    { name: 'Body Type Calculator', href: '/body-type-calculator' },
+    { name: 'Body Surface Area Calculator', href: '/body-surface-area-calculator' },
+    { name: 'BAC Calculator', href: '/bac-calculator' },
+  ],
+};
+
+const mathCalculators = {
+  'Math': [
+    { name: 'Scientific Calculator', href: '/scientific-calculator' },
+    { name: 'Fraction Calculator', href: '/fraction-calculator' },
+    { name: 'Percentage Calculator', href: '/percentage-calculator' },
+    { name: 'Random Number Generator', href: '/random-number-generator' },
+    { name: 'Percent Error Calculator', href: '/percent-error-calculator' },
+    { name: 'Exponent Calculator', href: '/exponent-calculator' },
+    { name: 'Binary Calculator', href: '/binary-calculator' },
+    { name: 'Hex Calculator', href: '/hex-calculator' },
+    { name: 'Half-Life Calculator', href: '/half-life-calculator' },
+    { name: 'Quadratic Formula Calculator', href: '/quadratic-formula-calculator' },
+    { name: 'Log Calculator', href: '/log-calculator' },
+    { name: 'Ratio Calculator', href: '/ratio-calculator' },
+    { name: 'Root Calculator', href: '/root-calculator' },
+    { name: 'LCM Calculator', href: '/lcm-calculator' },
+    { name: 'GCF Calculator', href: '/gcf-calculator' },
+    { name: 'Factor Calculator', href: '/factor-calculator' },
+    { name: 'Rounding Calculator', href: '/rounding-calculator' },
+    { name: 'Matrix Calculator', href: '/matrix-calculator' },
+    { name: 'Scientific Notation Calculator', href: '/scientific-notation-calculator' },
+    { name: 'Big Number Calculator', href: '/big-number-calculator' },
+  ],
+  'Statistics': [
+    { name: 'Standard Deviation Calculator', href: '/standard-deviation-calculator' },
+    { name: 'Number Sequence Calculator', href: '/number-sequence-calculator' },
+    { name: 'Sample Size Calculator', href: '/sample-size-calculator' },
+    { name: 'Probability Calculator', href: '/probability-calculator' },
+    { name: 'Statistics Calculator', href: '/statistics-calculator' },
+    { name: 'Mean, Median, Mode, Range Calculator', href: '/mean-median-mode-range-calculator' },
+    { name: 'Permutation and Combination Calculator', href: '/permutation-combination-calculator' },
+    { name: 'Z-score Calculator', href: '/z-score-calculator' },
+    { name: 'Confidence Interval Calculator', href: '/confidence-interval-calculator' },
+  ],
+  'Geometry': [
+    { name: 'Triangle Calculator', href: '/triangle-calculator' },
+    { name: 'Volume Calculator', href: '/volume-calculator' },
+    { name: 'Slope Calculator', href: '/slope-calculator' },
+    { name: 'Area Calculator', href: '/area-calculator' },
+    { name: 'Distance Calculator', href: '/distance-calculator' },
+    { name: 'Circle Calculator', href: '/circle-calculator' },
+    { name: 'Surface Area Calculator', href: '/surface-area-calculator' },
+    { name: 'Pythagorean Theorem Calculator', href: '/pythagorean-theorem-calculator' },
+    { name: 'Right Triangle Calculator', href: '/right-triangle-calculator' },
+  ],
+};
+
 const otherCalculators = {
   'Date and Time': [
     { name: 'Age Calculator', href: '/age-calculator' },
@@ -136,84 +220,6 @@ const otherCalculators = {
     { name: 'Dice Roller', href: '/dice-roller' },
     { name: 'Love Calculator', href: '/love-calculator' },
   ],
-  'Fitness': [
-    { name: 'BMI Calculator', href: '/bmi-calculator' },
-    { name: 'Calorie Calculator', href: '/calorie-calculator' },
-    { name: 'Body Fat Calculator', href: '/body-fat-calculator' },
-    { name: 'BMR Calculator', href: '/bmr-calculator' },
-    { name: 'Ideal Weight Calculator', href: '/ideal-weight-calculator' },
-    { name: 'Pace Calculator', href: '/pace-calculator' },
-    { name: 'Army Body Fat Calculator', href: '/army-body-fat-calculator' },
-    { name: 'Lean Body Mass Calculator', href: '/lean-body-mass-calculator' },
-    { name: 'Healthy Weight Calculator', href: '/healthy-weight-calculator' },
-    { name: 'Calories Burned Calculator', href: '/calories-burned-calculator' },
-    { name: 'One Rep Max Calculator', href: '/one-rep-max-calculator' },
-    { name: 'Target Heart Rate Calculator', href: '/target-heart-rate-calculator' },
-  ],
-  'Pregnancy': [
-    { name: 'Pregnancy Calculator', href: '/pregnancy-calculator' },
-    { name: 'Pregnancy Weight Gain Calculator', href: '/pregnancy-weight-gain-calculator' },
-    { name: 'Pregnancy Conception Calculator', href: '/pregnancy-conception-calculator' },
-    { name: 'Due Date Calculator', href: '/due-date-calculator' },
-    { name: 'Ovulation Calculator', href: '/ovulation-calculator' },
-    { name: 'Conception Calculator', href: '/conception-calculator' },
-    { name: 'Period Calculator', href: '/period-calculator' },
-  ],
-  'Other Health': [
-    { name: 'Macro Calculator', href: '/macro-calculator' },
-    { name: 'Carbohydrate Calculator', href: '/carbohydrate-calculator' },
-    { name: 'Protein Calculator', href: '/protein-calculator' },
-    { name: 'Fat Intake Calculator', href: '/fat-intake-calculator' },
-    { name: 'TDEE Calculator', href: '/tdee-calculator' },
-    { name: 'GFR Calculator', href: '/gfr-calculator' },
-    { name: 'Body Type Calculator', href: '/body-type-calculator' },
-    { name: 'Body Surface Area Calculator', href: '/body-surface-area-calculator' },
-    { name: 'BAC Calculator', href: '/bac-calculator' },
-  ],
-  'Math': [
-    { name: 'Scientific Calculator', href: '/scientific-calculator' },
-    { name: 'Fraction Calculator', href: '/fraction-calculator' },
-    { name: 'Percentage Calculator', href: '/percentage-calculator' },
-    { name: 'Random Number Generator', href: '/random-number-generator' },
-    { name: 'Percent Error Calculator', href: '/percent-error-calculator' },
-    { name: 'Exponent Calculator', href: '/exponent-calculator' },
-    { name: 'Binary Calculator', href: '/binary-calculator' },
-    { name: 'Hex Calculator', href: '/hex-calculator' },
-    { name: 'Half-Life Calculator', href: '/half-life-calculator' },
-    { name: 'Quadratic Formula Calculator', href: '/quadratic-formula-calculator' },
-    { name: 'Log Calculator', href: '/log-calculator' },
-    { name: 'Ratio Calculator', href: '/ratio-calculator' },
-    { name: 'Root Calculator', href: '/root-calculator' },
-    { name: 'LCM Calculator', href: '/lcm-calculator' },
-    { name: 'GCF Calculator', href: '/gcf-calculator' },
-    { name: 'Factor Calculator', href: '/factor-calculator' },
-    { name: 'Rounding Calculator', href: '/rounding-calculator' },
-    { name: 'Matrix Calculator', href: '/matrix-calculator' },
-    { name: 'Scientific Notation Calculator', href: '/scientific-notation-calculator' },
-    { name: 'Big Number Calculator', href: '/big-number-calculator' },
-  ],
-  'Statistics': [
-    { name: 'Standard Deviation Calculator', href: '/standard-deviation-calculator' },
-    { name: 'Number Sequence Calculator', href: '/number-sequence-calculator' },
-    { name: 'Sample Size Calculator', href: '/sample-size-calculator' },
-    { name: 'Probability Calculator', href: '/probability-calculator' },
-    { name: 'Statistics Calculator', href: '/statistics-calculator' },
-    { name: 'Mean, Median, Mode, Range Calculator', href: '/mean-median-mode-range-calculator' },
-    { name: 'Permutation and Combination Calculator', href: '/permutation-combination-calculator' },
-    { name: 'Z-score Calculator', href: '/z-score-calculator' },
-    { name: 'Confidence Interval Calculator', href: '/confidence-interval-calculator' },
-  ],
-  'Geometry': [
-    { name: 'Triangle Calculator', href: '/triangle-calculator' },
-    { name: 'Volume Calculator', href: '/volume-calculator' },
-    { name: 'Slope Calculator', href: '/slope-calculator' },
-    { name: 'Area Calculator', href: '/area-calculator' },
-    { name: 'Distance Calculator', href: '/distance-calculator' },
-    { name: 'Circle Calculator', href: '/circle-calculator' },
-    { name: 'Surface Area Calculator', href: '/surface-area-calculator' },
-    { name: 'Pythagorean Theorem Calculator', href: '/pythagorean-theorem-calculator' },
-    { name: 'Right Triangle Calculator', href: '/right-triangle-calculator' },
-  ],
 };
 
 export default function CalculatorsPage() {
@@ -223,11 +229,49 @@ export default function CalculatorsPage() {
       <main className="pt-[80px] pb-16 px-6">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-4xl font-bold mb-2 text-center">All Calculators</h1>
-          <p className="text-muted-foreground text-center mb-12">Browse our complete collection of financial and utility calculators</p>
+          <p className="text-muted-foreground text-center mb-12">Browse our complete collection of calculators</p>
           
           <h2 className="text-2xl font-bold mb-6 border-b border-border pb-2">Financial Calculators</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {Object.entries(financialCalculators).map(([category, calcs]) => (
+              <div key={category} className="bg-card rounded-lg border border-border p-5">
+                <h3 className="font-bold text-lg mb-4 text-accent">{category}</h3>
+                <ul className="space-y-2">
+                  {calcs.map((calc) => (
+                    <li key={calc.href}>
+                      <Link href={calc.href} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-muted-foreground"></span>
+                        {calc.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <h2 className="text-2xl font-bold mb-6 border-b border-border pb-2">Fitness & Health Calculators</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {Object.entries(fitnessHealthCalculators).map(([category, calcs]) => (
+              <div key={category} className="bg-card rounded-lg border border-border p-5">
+                <h3 className="font-bold text-lg mb-4 text-accent">{category}</h3>
+                <ul className="space-y-2">
+                  {calcs.map((calc) => (
+                    <li key={calc.href}>
+                      <Link href={calc.href} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-muted-foreground"></span>
+                        {calc.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <h2 className="text-2xl font-bold mb-6 border-b border-border pb-2">Math Calculators</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {Object.entries(mathCalculators).map(([category, calcs]) => (
               <div key={category} className="bg-card rounded-lg border border-border p-5">
                 <h3 className="font-bold text-lg mb-4 text-accent">{category}</h3>
                 <ul className="space-y-2">
