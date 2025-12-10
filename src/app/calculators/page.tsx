@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Header from '@/components/sections/header';
 import Footer from '@/components/sections/footer';
@@ -222,89 +222,134 @@ const otherCalculators = {
   ],
 };
 
+const tabs = [
+  { id: 'financial', label: 'Financial' },
+  { id: 'fitness', label: 'Fitness & Health' },
+  { id: 'math', label: 'Math' },
+  { id: 'other', label: 'Other' },
+];
+
 export default function CalculatorsPage() {
+  const [activeTab, setActiveTab] = useState('financial');
+
+  const scrollToSection = (id: string) => {
+    setActiveTab(id);
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 160;
+      const top = element.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <Header />
       <main className="pt-[80px] pb-16 px-6">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-4xl font-bold mb-2 text-center">All Calculators</h1>
-          <p className="text-muted-foreground text-center mb-12">Browse our complete collection of calculators</p>
+          <p className="text-muted-foreground text-center mb-6">Browse our complete collection of calculators</p>
           
-          <h2 className="text-2xl font-bold mb-6 border-b border-border pb-2">Financial Calculators</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {Object.entries(financialCalculators).map(([category, calcs]) => (
-              <div key={category} className="bg-card rounded-lg border border-border p-5">
-                <h3 className="font-bold text-lg mb-4 text-accent">{category}</h3>
-                <ul className="space-y-2">
-                  {calcs.map((calc) => (
-                    <li key={calc.href}>
-                      <Link href={calc.href} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
-                        <span className="w-1 h-1 rounded-full bg-muted-foreground"></span>
-                        {calc.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="sticky top-[80px] z-40 bg-background/95 backdrop-blur-sm py-4 mb-8 border-b border-border">
+            <div className="flex flex-wrap justify-center gap-2">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => scrollToSection(tab.id)}
+                  className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
+                    activeTab === tab.id
+                      ? 'bg-primary text-primary-foreground shadow-md'
+                      : 'bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          <div id="financial">
+            <h2 className="text-2xl font-bold mb-6 border-b border-border pb-2">Financial Calculators</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {Object.entries(financialCalculators).map(([category, calcs]) => (
+                <div key={category} className="bg-card rounded-lg border border-border p-5">
+                  <h3 className="font-bold text-lg mb-4 text-accent">{category}</h3>
+                  <ul className="space-y-2">
+                    {calcs.map((calc) => (
+                      <li key={calc.href}>
+                        <Link href={calc.href} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                          <span className="w-1 h-1 rounded-full bg-muted-foreground"></span>
+                          {calc.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <h2 className="text-2xl font-bold mb-6 border-b border-border pb-2">Fitness & Health Calculators</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {Object.entries(fitnessHealthCalculators).map(([category, calcs]) => (
-              <div key={category} className="bg-card rounded-lg border border-border p-5">
-                <h3 className="font-bold text-lg mb-4 text-accent">{category}</h3>
-                <ul className="space-y-2">
-                  {calcs.map((calc) => (
-                    <li key={calc.href}>
-                      <Link href={calc.href} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
-                        <span className="w-1 h-1 rounded-full bg-muted-foreground"></span>
-                        {calc.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div id="fitness">
+            <h2 className="text-2xl font-bold mb-6 border-b border-border pb-2">Fitness & Health Calculators</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {Object.entries(fitnessHealthCalculators).map(([category, calcs]) => (
+                <div key={category} className="bg-card rounded-lg border border-border p-5">
+                  <h3 className="font-bold text-lg mb-4 text-accent">{category}</h3>
+                  <ul className="space-y-2">
+                    {calcs.map((calc) => (
+                      <li key={calc.href}>
+                        <Link href={calc.href} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                          <span className="w-1 h-1 rounded-full bg-muted-foreground"></span>
+                          {calc.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <h2 className="text-2xl font-bold mb-6 border-b border-border pb-2">Math Calculators</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {Object.entries(mathCalculators).map(([category, calcs]) => (
-              <div key={category} className="bg-card rounded-lg border border-border p-5">
-                <h3 className="font-bold text-lg mb-4 text-accent">{category}</h3>
-                <ul className="space-y-2">
-                  {calcs.map((calc) => (
-                    <li key={calc.href}>
-                      <Link href={calc.href} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
-                        <span className="w-1 h-1 rounded-full bg-muted-foreground"></span>
-                        {calc.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div id="math">
+            <h2 className="text-2xl font-bold mb-6 border-b border-border pb-2">Math Calculators</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {Object.entries(mathCalculators).map(([category, calcs]) => (
+                <div key={category} className="bg-card rounded-lg border border-border p-5">
+                  <h3 className="font-bold text-lg mb-4 text-accent">{category}</h3>
+                  <ul className="space-y-2">
+                    {calcs.map((calc) => (
+                      <li key={calc.href}>
+                        <Link href={calc.href} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                          <span className="w-1 h-1 rounded-full bg-muted-foreground"></span>
+                          {calc.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <h2 className="text-2xl font-bold mb-6 border-b border-border pb-2">Other Calculators</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {Object.entries(otherCalculators).map(([category, calcs]) => (
-              <div key={category} className="bg-card rounded-lg border border-border p-5">
-                <h3 className="font-bold text-lg mb-4 text-accent">{category}</h3>
-                <ul className="space-y-2">
-                  {calcs.map((calc) => (
-                    <li key={calc.href}>
-                      <Link href={calc.href} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
-                        <span className="w-1 h-1 rounded-full bg-muted-foreground"></span>
-                        {calc.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div id="other">
+            <h2 className="text-2xl font-bold mb-6 border-b border-border pb-2">Other Calculators</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {Object.entries(otherCalculators).map(([category, calcs]) => (
+                <div key={category} className="bg-card rounded-lg border border-border p-5">
+                  <h3 className="font-bold text-lg mb-4 text-accent">{category}</h3>
+                  <ul className="space-y-2">
+                    {calcs.map((calc) => (
+                      <li key={calc.href}>
+                        <Link href={calc.href} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                          <span className="w-1 h-1 rounded-full bg-muted-foreground"></span>
+                          {calc.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </main>
