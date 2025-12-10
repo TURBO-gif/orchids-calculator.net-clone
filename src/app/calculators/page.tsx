@@ -66,18 +66,39 @@ const financialCalculators = {
 };
 
 const otherCalculators = {
-  'Fitness & Health': [
+  'Fitness': [
     { name: 'BMI Calculator', href: '/bmi-calculator' },
     { name: 'Calorie Calculator', href: '/calorie-calculator' },
     { name: 'Body Fat Calculator', href: '/body-fat-calculator' },
     { name: 'BMR Calculator', href: '/bmr-calculator' },
-    { name: 'Macro Calculator', href: '/macro-calculator' },
     { name: 'Ideal Weight Calculator', href: '/ideal-weight-calculator' },
+    { name: 'Pace Calculator', href: '/pace-calculator' },
+    { name: 'Army Body Fat Calculator', href: '/army-body-fat-calculator' },
+    { name: 'Lean Body Mass Calculator', href: '/lean-body-mass-calculator' },
+    { name: 'Healthy Weight Calculator', href: '/healthy-weight-calculator' },
+    { name: 'Calories Burned Calculator', href: '/calories-burned-calculator' },
+    { name: 'One Rep Max Calculator', href: '/one-rep-max-calculator' },
+    { name: 'Target Heart Rate Calculator', href: '/target-heart-rate-calculator' },
+  ],
+  'Pregnancy': [
     { name: 'Pregnancy Calculator', href: '/pregnancy-calculator' },
     { name: 'Pregnancy Weight Gain Calculator', href: '/pregnancy-weight-gain-calculator' },
     { name: 'Pregnancy Conception Calculator', href: '/pregnancy-conception-calculator' },
     { name: 'Due Date Calculator', href: '/due-date-calculator' },
-    { name: 'Pace Calculator', href: '/pace-calculator' },
+    { name: 'Ovulation Calculator', href: '/ovulation-calculator' },
+    { name: 'Conception Calculator', href: '/conception-calculator' },
+    { name: 'Period Calculator', href: '/period-calculator' },
+  ],
+  'Other Health': [
+    { name: 'Macro Calculator', href: '/macro-calculator' },
+    { name: 'Carbohydrate Calculator', href: '/carbohydrate-calculator' },
+    { name: 'Protein Calculator', href: '/protein-calculator' },
+    { name: 'Fat Intake Calculator', href: '/fat-intake-calculator' },
+    { name: 'TDEE Calculator', href: '/tdee-calculator' },
+    { name: 'GFR Calculator', href: '/gfr-calculator' },
+    { name: 'Body Type Calculator', href: '/body-type-calculator' },
+    { name: 'Body Surface Area Calculator', href: '/body-surface-area-calculator' },
+    { name: 'BAC Calculator', href: '/bac-calculator' },
   ],
   'Math': [
     { name: 'Scientific Calculator', href: '/scientific-calculator' },
