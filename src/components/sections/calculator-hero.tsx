@@ -5,23 +5,57 @@ import { Search } from 'lucide-react';
 import Link from 'next/link';
 
 const allCalculators = [
+  // Mortgage & Real Estate
   { name: 'Mortgage Calculator', href: '/mortgage-calculator' },
-  { name: 'Loan Calculator', href: '/loan-calculator' },
+  { name: 'Amortization Calculator', href: '/amortization-calculator' },
+  { name: 'Mortgage Payoff Calculator', href: '/mortgage-payoff-calculator' },
+  { name: 'House Affordability Calculator', href: '/house-affordability-calculator' },
+  { name: 'Rent Calculator', href: '/rent-calculator' },
+  { name: 'Debt-to-Income Ratio Calculator', href: '/debt-to-income-calculator' },
+  { name: 'Real Estate Calculator', href: '/real-estate-calculator' },
+  { name: 'Refinance Calculator', href: '/refinance-calculator' },
+  { name: 'Rental Property Calculator', href: '/rental-property-calculator' },
+  { name: 'APR Calculator', href: '/apr-calculator' },
+  { name: 'FHA Loan Calculator', href: '/fha-loan-calculator' },
+  { name: 'VA Mortgage Calculator', href: '/va-mortgage-calculator' },
+  { name: 'Home Equity Loan Calculator', href: '/home-equity-loan-calculator' },
+  { name: 'HELOC Calculator', href: '/heloc-calculator' },
+  { name: 'Down Payment Calculator', href: '/down-payment-calculator' },
+  { name: 'Rent vs. Buy Calculator', href: '/rent-vs-buy-calculator' },
+  // Retirement
+  { name: 'Retirement Calculator', href: '/retirement-calculator' },
+  { name: '401K Calculator', href: '/401k-calculator' },
+  { name: 'Pension Calculator', href: '/pension-calculator' },
+  { name: 'Social Security Calculator', href: '/social-security-calculator' },
+  { name: 'Annuity Calculator', href: '/annuity-calculator' },
+  { name: 'Annuity Payout Calculator', href: '/annuity-payout-calculator' },
+  { name: 'Roth IRA Calculator', href: '/roth-ira-calculator' },
+  { name: 'IRA Calculator', href: '/ira-calculator' },
+  { name: 'RMD Calculator', href: '/rmd-calculator' },
+  // Tax & Salary
+  { name: 'Income Tax Calculator', href: '/income-tax-calculator' },
+  { name: 'Salary Calculator', href: '/salary-calculator' },
+  { name: 'Marriage Tax Calculator', href: '/marriage-tax-calculator' },
+  { name: 'Estate Tax Calculator', href: '/estate-tax-calculator' },
+  { name: 'Take-Home Paycheck Calculator', href: '/take-home-paycheck-calculator' },
+  { name: 'Sales Tax Calculator', href: '/sales-tax-calculator' },
+  { name: 'Tax Calculator', href: '/tax-calculator' },
+  // Auto
   { name: 'Auto Loan Calculator', href: '/auto-loan-calculator' },
+  { name: 'Auto Lease Calculator', href: '/auto-lease-calculator' },
+  // Investment
+  { name: 'Loan Calculator', href: '/loan-calculator' },
   { name: 'Interest Calculator', href: '/interest-calculator' },
   { name: 'Payment Calculator', href: '/payment-calculator' },
-  { name: 'Retirement Calculator', href: '/retirement-calculator' },
-  { name: 'Amortization Calculator', href: '/amortization-calculator' },
   { name: 'Investment Calculator', href: '/investment-calculator' },
   { name: 'Currency Calculator', href: '/currency-calculator' },
-  { name: 'Mortgage Payoff Calculator', href: '/mortgage-payoff-calculator' },
   { name: 'Inflation Calculator', href: '/inflation-calculator' },
   { name: 'Compound Interest Calculator', href: '/compound-interest-calculator' },
-  { name: 'Income Tax Calculator', href: '/income-tax-calculator' },
-  { name: '401K Calculator', href: '/401k-calculator' },
-  { name: 'Sales Tax Calculator', href: '/sales-tax-calculator' },
   { name: 'Interest Rate Calculator', href: '/interest-rate-calculator' },
   { name: 'Finance Calculator', href: '/finance-calculator' },
+  { name: 'Savings Calculator', href: '/savings-calculator' },
+  { name: 'Simple Interest Calculator', href: '/simple-interest-calculator' },
+  // Fitness & Health
   { name: 'BMI Calculator', href: '/bmi-calculator' },
   { name: 'Calorie Calculator', href: '/calorie-calculator' },
   { name: 'Body Fat Calculator', href: '/body-fat-calculator' },
@@ -33,6 +67,7 @@ const allCalculators = [
   { name: 'Pregnancy Conception Calculator', href: '/pregnancy-conception-calculator' },
   { name: 'Due Date Calculator', href: '/due-date-calculator' },
   { name: 'Pace Calculator', href: '/pace-calculator' },
+  // Math
   { name: 'Scientific Calculator', href: '/scientific-calculator' },
   { name: 'Fraction Calculator', href: '/fraction-calculator' },
   { name: 'Percentage Calculator', href: '/percentage-calculator' },
@@ -40,6 +75,7 @@ const allCalculators = [
   { name: 'Volume Calculator', href: '/volume-calculator' },
   { name: 'Standard Deviation Calculator', href: '/standard-deviation-calculator' },
   { name: 'Random Number Generator', href: '/random-number-generator' },
+  // Other
   { name: 'Age Calculator', href: '/age-calculator' },
   { name: 'Date Calculator', href: '/date-calculator' },
   { name: 'Time Calculator', href: '/time-calculator' },
@@ -52,8 +88,6 @@ const allCalculators = [
   { name: 'Password Generator', href: '/password-generator' },
   { name: 'Dice Roller', href: '/dice-roller' },
   { name: 'Conversion Calculator', href: '/conversion-calculator' },
-  { name: 'Salary Calculator', href: '/salary-calculator' },
-  { name: 'Tax Calculator', href: '/tax-calculator' },
 ];
 
 type SciButtonProps = {
