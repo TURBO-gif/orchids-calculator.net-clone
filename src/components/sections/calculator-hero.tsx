@@ -1,7 +1,60 @@
 "use client";
 
-import React, { useState, FC, HTMLAttributes } from 'react';
+import React, { useState, useMemo, useRef, useEffect, FC, HTMLAttributes } from 'react';
 import { Search } from 'lucide-react';
+import Link from 'next/link';
+
+const allCalculators = [
+  { name: 'Mortgage Calculator', href: '/mortgage-calculator' },
+  { name: 'Loan Calculator', href: '/loan-calculator' },
+  { name: 'Auto Loan Calculator', href: '/auto-loan-calculator' },
+  { name: 'Interest Calculator', href: '/interest-calculator' },
+  { name: 'Payment Calculator', href: '/payment-calculator' },
+  { name: 'Retirement Calculator', href: '/retirement-calculator' },
+  { name: 'Amortization Calculator', href: '/amortization-calculator' },
+  { name: 'Investment Calculator', href: '/investment-calculator' },
+  { name: 'Currency Calculator', href: '/currency-calculator' },
+  { name: 'Mortgage Payoff Calculator', href: '/mortgage-payoff-calculator' },
+  { name: 'Inflation Calculator', href: '/inflation-calculator' },
+  { name: 'Compound Interest Calculator', href: '/compound-interest-calculator' },
+  { name: 'Income Tax Calculator', href: '/income-tax-calculator' },
+  { name: '401K Calculator', href: '/401k-calculator' },
+  { name: 'Sales Tax Calculator', href: '/sales-tax-calculator' },
+  { name: 'Interest Rate Calculator', href: '/interest-rate-calculator' },
+  { name: 'Finance Calculator', href: '/finance-calculator' },
+  { name: 'BMI Calculator', href: '/bmi-calculator' },
+  { name: 'Calorie Calculator', href: '/calorie-calculator' },
+  { name: 'Body Fat Calculator', href: '/body-fat-calculator' },
+  { name: 'BMR Calculator', href: '/bmr-calculator' },
+  { name: 'Macro Calculator', href: '/macro-calculator' },
+  { name: 'Ideal Weight Calculator', href: '/ideal-weight-calculator' },
+  { name: 'Pregnancy Calculator', href: '/pregnancy-calculator' },
+  { name: 'Pregnancy Weight Gain Calculator', href: '/pregnancy-weight-gain-calculator' },
+  { name: 'Pregnancy Conception Calculator', href: '/pregnancy-conception-calculator' },
+  { name: 'Due Date Calculator', href: '/due-date-calculator' },
+  { name: 'Pace Calculator', href: '/pace-calculator' },
+  { name: 'Scientific Calculator', href: '/scientific-calculator' },
+  { name: 'Fraction Calculator', href: '/fraction-calculator' },
+  { name: 'Percentage Calculator', href: '/percentage-calculator' },
+  { name: 'Triangle Calculator', href: '/triangle-calculator' },
+  { name: 'Volume Calculator', href: '/volume-calculator' },
+  { name: 'Standard Deviation Calculator', href: '/standard-deviation-calculator' },
+  { name: 'Random Number Generator', href: '/random-number-generator' },
+  { name: 'Age Calculator', href: '/age-calculator' },
+  { name: 'Date Calculator', href: '/date-calculator' },
+  { name: 'Time Calculator', href: '/time-calculator' },
+  { name: 'Hours Calculator', href: '/hours-calculator' },
+  { name: 'GPA Calculator', href: '/gpa-calculator' },
+  { name: 'Grade Calculator', href: '/grade-calculator' },
+  { name: 'Concrete Calculator', href: '/concrete-calculator' },
+  { name: 'IP Subnet Calculator', href: '/ip-subnet-calculator' },
+  { name: 'Bra Size Calculator', href: '/bra-size-calculator' },
+  { name: 'Password Generator', href: '/password-generator' },
+  { name: 'Dice Roller', href: '/dice-roller' },
+  { name: 'Conversion Calculator', href: '/conversion-calculator' },
+  { name: 'Salary Calculator', href: '/salary-calculator' },
+  { name: 'Tax Calculator', href: '/tax-calculator' },
+];
 
 type SciButtonProps = {
   children: React.ReactNode;
@@ -34,6 +87,37 @@ const CalculatorHero = () => {
     const [expression, setExpression] = useState('');
     const [memory, setMemory] = useState(0);
     const [lastAnswer, setLastAnswer] = useState(0);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [showResults, setShowResults] = useState(false);
+    const searchRef = useRef<HTMLDivElement>(null);
+
+    const filteredCalculators = useMemo(() => {
+      if (!searchQuery.trim()) return [];
+      const query = searchQuery.toLowerCase();
+      return allCalculators.filter(calc => 
+        calc.name.toLowerCase().includes(query)
+      ).slice(0, 8);
+    }, [searchQuery]);
+
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+          setShowResults(false);
+        }
+      };
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(e.target.value);
+      setShowResults(true);
+    };
+
+    const handlePopularSearch = (term: string) => {
+      setSearchQuery(term);
+      setShowResults(true);
+    };
 
     const toRadians = (deg: number) => deg * (Math.PI / 180);
     const toDegrees = (rad: number) => rad * (180 / Math.PI);
@@ -281,30 +365,51 @@ const CalculatorHero = () => {
                     <div className="flex-grow w-full lg:w-auto">
                         <div className="bg-white/60 backdrop-blur-xl p-8 rounded-2xl shadow-xl border border-border/50">
                             <h2 className="text-2xl font-bold mb-6">Find Your Calculator</h2>
-                            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                            <div className="space-y-4" ref={searchRef}>
                                 <div className="relative">
                                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                                     <input
                                         type="text"
                                         placeholder="Search calculators..."
+                                        value={searchQuery}
+                                        onChange={handleSearchChange}
+                                        onFocus={() => setShowResults(true)}
                                         className="w-full h-12 bg-white border border-border rounded-xl pl-12 pr-4 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
                                     />
+                                    {showResults && filteredCalculators.length > 0 && (
+                                        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-border rounded-xl shadow-xl z-50 overflow-hidden">
+                                            {filteredCalculators.map((calc) => (
+                                                <Link
+                                                    key={calc.href}
+                                                    href={calc.href}
+                                                    className="flex items-center gap-3 px-4 py-3 hover:bg-secondary/50 transition-colors border-b border-border/50 last:border-b-0"
+                                                    onClick={() => setShowResults(false)}
+                                                >
+                                                    <Search className="w-4 h-4 text-muted-foreground" />
+                                                    <span className="text-sm font-medium">{calc.name}</span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
+                                    {showResults && searchQuery.trim() && filteredCalculators.length === 0 && (
+                                        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-border rounded-xl shadow-xl z-50 p-4">
+                                            <p className="text-sm text-muted-foreground text-center">No calculators found for "{searchQuery}"</p>
+                                        </div>
+                                    )}
                                 </div>
-                                <button
-                                    type="submit"
-                                    className="w-full h-12 bg-gradient-to-r from-primary to-accent text-white font-medium rounded-xl hover:shadow-lg transition-all active:scale-[0.98]"
-                                >
-                                    Search
-                                </button>
-                            </form>
+                            </div>
                             
                             <div className="mt-8 pt-8 border-t border-border">
                                 <h3 className="text-sm font-semibold text-muted-foreground mb-4">POPULAR SEARCHES</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {['Mortgage', 'BMI', 'Loan', 'Age', 'Percentage'].map((tag) => (
-                                        <span key={tag} className="px-3 py-1.5 bg-secondary text-secondary-foreground text-sm font-medium rounded-lg hover:bg-secondary/80 cursor-pointer transition-colors">
+                                        <button 
+                                            key={tag} 
+                                            onClick={() => handlePopularSearch(tag)}
+                                            className="px-3 py-1.5 bg-secondary text-secondary-foreground text-sm font-medium rounded-lg hover:bg-secondary/80 cursor-pointer transition-colors"
+                                        >
                                             {tag}
-                                        </span>
+                                        </button>
                                     ))}
                                 </div>
                             </div>
