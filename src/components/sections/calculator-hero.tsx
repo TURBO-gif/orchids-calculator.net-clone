@@ -220,7 +220,7 @@ const CalculatorHero = () => {
                                         <SciButton variant="function" onClick={() => handleFunction('10x')}>10<sup>x</sup></SciButton>
                                     </div>
                                     <div className="flex gap-2">
-                                        <SciButton variant="function" onClick={() => handleOperator('**(1/')}>><sup>y</sup>√x</SciButton>
+                                        <SciButton variant="function" onClick={() => handleOperator('**(1/')}><sup>y</sup>√x</SciButton>
                                         <SciButton variant="function" onClick={() => handleFunction('cbrt')}><sup>3</sup>√x</SciButton>
                                         <SciButton variant="function" onClick={() => handleFunction('sqrt')}>√x</SciButton>
                                         <SciButton variant="function" onClick={() => handleFunction('ln')}>ln</SciButton>
