@@ -15,7 +15,7 @@ export default function InflationCalculatorPage() {
     const time = parseFloat(years) || 0;
 
     const futureValue = amount * Math.pow(1 + rate, time);
-    const purchasing Power = amount / Math.pow(1 + rate, time);
+    const purchasingPower = amount / Math.pow(1 + rate, time);
     const totalInflation = futureValue - amount;
 
     setResult({
