@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState, useMemo, useRef, useEffect, FC, HTMLAttributes } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Delete, RotateCcw, History, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
 const allCalculators = [
-  // Mortgage & Real Estate
   { name: 'Mortgage Calculator', href: '/mortgage-calculator' },
   { name: 'Amortization Calculator', href: '/amortization-calculator' },
   { name: 'Mortgage Payoff Calculator', href: '/mortgage-payoff-calculator' },
@@ -22,7 +21,6 @@ const allCalculators = [
   { name: 'HELOC Calculator', href: '/heloc-calculator' },
   { name: 'Down Payment Calculator', href: '/down-payment-calculator' },
   { name: 'Rent vs. Buy Calculator', href: '/rent-vs-buy-calculator' },
-  // Retirement
   { name: 'Retirement Calculator', href: '/retirement-calculator' },
   { name: '401K Calculator', href: '/401k-calculator' },
   { name: 'Pension Calculator', href: '/pension-calculator' },
@@ -32,7 +30,6 @@ const allCalculators = [
   { name: 'Roth IRA Calculator', href: '/roth-ira-calculator' },
   { name: 'IRA Calculator', href: '/ira-calculator' },
   { name: 'RMD Calculator', href: '/rmd-calculator' },
-  // Tax & Salary
   { name: 'Income Tax Calculator', href: '/income-tax-calculator' },
   { name: 'Salary Calculator', href: '/salary-calculator' },
   { name: 'Marriage Tax Calculator', href: '/marriage-tax-calculator' },
@@ -40,10 +37,8 @@ const allCalculators = [
   { name: 'Take-Home Paycheck Calculator', href: '/take-home-paycheck-calculator' },
   { name: 'Sales Tax Calculator', href: '/sales-tax-calculator' },
   { name: 'Tax Calculator', href: '/tax-calculator' },
-  // Auto
   { name: 'Auto Loan Calculator', href: '/auto-loan-calculator' },
   { name: 'Auto Lease Calculator', href: '/auto-lease-calculator' },
-  // Investment
   { name: 'Loan Calculator', href: '/loan-calculator' },
   { name: 'Interest Calculator', href: '/interest-calculator' },
   { name: 'Payment Calculator', href: '/payment-calculator' },
@@ -55,7 +50,6 @@ const allCalculators = [
   { name: 'Finance Calculator', href: '/finance-calculator' },
   { name: 'Savings Calculator', href: '/savings-calculator' },
   { name: 'Simple Interest Calculator', href: '/simple-interest-calculator' },
-  // Fitness & Health
   { name: 'BMI Calculator', href: '/bmi-calculator' },
   { name: 'Calorie Calculator', href: '/calorie-calculator' },
   { name: 'Body Fat Calculator', href: '/body-fat-calculator' },
@@ -67,7 +61,6 @@ const allCalculators = [
   { name: 'Pregnancy Conception Calculator', href: '/pregnancy-conception-calculator' },
   { name: 'Due Date Calculator', href: '/due-date-calculator' },
   { name: 'Pace Calculator', href: '/pace-calculator' },
-  // Math
   { name: 'Scientific Calculator', href: '/scientific-calculator' },
   { name: 'Fraction Calculator', href: '/fraction-calculator' },
   { name: 'Percentage Calculator', href: '/percentage-calculator' },
@@ -75,7 +68,6 @@ const allCalculators = [
   { name: 'Volume Calculator', href: '/volume-calculator' },
   { name: 'Standard Deviation Calculator', href: '/standard-deviation-calculator' },
   { name: 'Random Number Generator', href: '/random-number-generator' },
-  // Other
   { name: 'Age Calculator', href: '/age-calculator' },
   { name: 'Date Calculator', href: '/date-calculator' },
   { name: 'Time Calculator', href: '/time-calculator' },
@@ -90,30 +82,41 @@ const allCalculators = [
   { name: 'Conversion Calculator', href: '/conversion-calculator' },
 ];
 
-type SciButtonProps = {
+type ButtonVariant = 'number' | 'operator' | 'function' | 'action' | 'equals';
+
+type CalcButtonProps = {
   children: React.ReactNode;
-  variant?: 'function' | 'number' | 'operator' | 'special';
+  variant?: ButtonVariant;
   className?: string;
   onClick?: () => void;
+  span?: number;
 } & HTMLAttributes<HTMLButtonElement>;
 
-const SciButton: FC<SciButtonProps> = ({ children, variant = 'function', className = '', onClick, ...props }) => {
-  const baseClasses = "flex items-center justify-center min-w-[50px] h-11 rounded-lg text-sm font-medium cursor-pointer transition-all active:scale-95";
+const CalcButton: FC<CalcButtonProps> = ({ children, variant = 'number', className = '', onClick, span = 1, ...props }) => {
+  const baseClasses = "flex items-center justify-center rounded-xl font-semibold cursor-pointer select-none transition-all duration-150 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/50";
   
-  const variantClasses = {
-    function: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm',
-    number: 'bg-white text-foreground font-semibold hover:bg-gray-50 shadow-md border border-border',
-    operator: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-md',
-    special: 'bg-accent text-accent-foreground hover:bg-accent/90 shadow-md',
+  const sizeClasses = "h-14 sm:h-16 text-lg";
+  
+  const variantClasses: Record<ButtonVariant, string> = {
+    number: 'bg-white dark:bg-slate-800 text-foreground hover:bg-gray-50 dark:hover:bg-slate-700 shadow-md border border-border/50 hover:shadow-lg',
+    operator: 'bg-gradient-to-br from-primary to-primary/90 text-white hover:from-primary/90 hover:to-primary shadow-md hover:shadow-lg',
+    function: 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 border border-slate-200 dark:border-slate-600',
+    action: 'bg-gradient-to-br from-destructive to-destructive/90 text-white hover:from-destructive/90 hover:to-destructive shadow-md',
+    equals: 'bg-gradient-to-br from-accent to-accent/90 text-white hover:from-accent/90 hover:to-accent shadow-lg hover:shadow-xl',
   };
 
+  const spanClass = span > 1 ? `col-span-${span}` : '';
+
   return (
-    <button className={`${baseClasses} ${variantClasses[variant]} ${className}`} onClick={onClick} {...props}>
+    <button 
+      className={`${baseClasses} ${sizeClasses} ${variantClasses[variant]} ${spanClass} ${className}`} 
+      onClick={onClick} 
+      {...props}
+    >
       {children}
     </button>
   );
 };
-
 
 const CalculatorHero = () => {
     const [angleUnit, setAngleUnit] = useState<'Deg' | 'Rad'>('Deg');
@@ -123,7 +126,12 @@ const CalculatorHero = () => {
     const [lastAnswer, setLastAnswer] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
     const [showResults, setShowResults] = useState(false);
+    const [history, setHistory] = useState<string[]>([]);
+    const [showHistory, setShowHistory] = useState(false);
+    const [hasError, setHasError] = useState(false);
+    const [resultFlash, setResultFlash] = useState(false);
     const searchRef = useRef<HTMLDivElement>(null);
+    const displayRef = useRef<HTMLDivElement>(null);
 
     const filteredCalculators = useMemo(() => {
       if (!searchQuery.trim()) return [];
@@ -157,7 +165,8 @@ const CalculatorHero = () => {
     const toDegrees = (rad: number) => rad * (180 / Math.PI);
 
     const handleNumber = (num: string) => {
-        if (display === '0' || display === 'Error') {
+        setHasError(false);
+        if (display === '0' || display === 'Error' || hasError) {
             setDisplay(num);
             setExpression(num);
         } else {
@@ -168,12 +177,14 @@ const CalculatorHero = () => {
 
     const handleOperator = (op: string) => {
         if (display === 'Error') return;
+        setHasError(false);
         setExpression(expression + op);
         setDisplay(display + op);
     };
 
     const handleFunction = (func: string) => {
         if (display === 'Error') return;
+        setHasError(false);
         
         try {
             const currentValue = parseFloat(display) || 0;
@@ -237,6 +248,7 @@ const CalculatorHero = () => {
             setExpression(result.toString());
         } catch {
             setDisplay('Error');
+            setHasError(true);
         }
     };
 
@@ -258,17 +270,23 @@ const CalculatorHero = () => {
                 .replace(/e(?!x)/g, Math.E.toString());
 
             const result = eval(expr);
-            setDisplay(result.toString());
-            setExpression(result.toString());
+            const resultStr = result.toString();
+            setDisplay(resultStr);
+            setExpression(resultStr);
             setLastAnswer(result);
+            setHistory(prev => [`${expression} = ${resultStr}`, ...prev.slice(0, 9)]);
+            setResultFlash(true);
+            setTimeout(() => setResultFlash(false), 500);
         } catch {
             setDisplay('Error');
+            setHasError(true);
         }
     };
 
     const clearAll = () => {
         setDisplay('0');
         setExpression('');
+        setHasError(false);
     };
 
     const backspace = () => {
@@ -279,172 +297,251 @@ const CalculatorHero = () => {
             setDisplay('0');
             setExpression('');
         }
+        setHasError(false);
     };
 
     return (
-        <section className="pt-24 pb-16 px-6">
+        <section className="pt-20 pb-16 px-4 sm:px-6">
             <div className="max-w-7xl mx-auto">
-                {/* Hero Title */}
-                <div className="text-center mb-12">
-                    <h1 className="text-5xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                        Modern Calculator Suite
+                <div className="text-center mb-10 animate-[slide-up_0.6s_ease-out]">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+                        <Sparkles className="w-4 h-4" />
+                        Professional Calculator Suite
+                    </div>
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent leading-tight">
+                        CalcHub
                     </h1>
                     <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                        Professional-grade calculators for finance, math, health, and more
+                        Over 70+ professional calculators for finance, math, health & more
                     </p>
                 </div>
 
-                <div className="flex flex-col lg:flex-row items-start gap-8">
-                    {/* Calculator */}
-                    <div className="w-full lg:w-auto flex-shrink-0 flex justify-center">
-                        <div className="bg-white/60 backdrop-blur-xl p-6 rounded-2xl shadow-xl border border-border/50 w-fit">
-                            {/* Display */}
-                            <div className="mb-4">
-                                <div className="h-6 text-sm text-right text-muted-foreground overflow-hidden mb-2">{expression || '\u00A0'}</div>
-                                <div className="bg-gradient-to-br from-primary/10 to-accent/10 backdrop-blur-sm text-foreground text-3xl font-bold text-right p-4 rounded-xl border border-border/50 min-h-[60px] flex items-center justify-end overflow-x-auto">{display}</div>
-                            </div>
-                            
-                            {/* Buttons */}
-                            <div className="flex gap-3">
-                                {/* Functions */}
-                                <div className="flex flex-col gap-2">
-                                    <div className="flex gap-2 items-center">
-                                        <SciButton variant="function" onClick={() => handleFunction('sin')}>sin</SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('cos')}>cos</SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('tan')}>tan</SciButton>
-                                        <div className="flex items-center gap-3 px-3 h-11">
-                                            <label className="flex items-center cursor-pointer text-sm font-medium">
-                                                <input type="radio" name="angle" value="Deg" checked={angleUnit === 'Deg'} onChange={() => setAngleUnit('Deg')} className="mr-1.5 accent-primary" />
-                                                Deg
-                                            </label>
-                                            <label className="flex items-center cursor-pointer text-sm font-medium">
-                                                <input type="radio" name="angle" value="Rad" checked={angleUnit === 'Rad'} onChange={() => setAngleUnit('Rad')} className="mr-1.5 accent-primary" />
-                                                Rad
-                                            </label>
-                                        </div>
+                <div className="flex flex-col xl:flex-row items-start gap-8">
+                    <div className="w-full xl:w-auto flex-shrink-0 flex justify-center animate-[scale-in_0.4s_ease-out]">
+                        <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-3xl shadow-2xl border border-border/50 w-full max-w-lg">
+                            <div className="mb-6">
+                                <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                        <button 
+                                            onClick={() => setShowHistory(!showHistory)}
+                                            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                            title="History"
+                                        >
+                                            <History className="w-4 h-4 text-muted-foreground" />
+                                        </button>
+                                        <span className="text-xs font-medium text-muted-foreground px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800">
+                                            {angleUnit}
+                                        </span>
                                     </div>
-                                    <div className="flex gap-2">
-                                        <SciButton variant="function" onClick={() => handleFunction('sin-1')}>sin<sup>-1</sup></SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('cos-1')}>cos<sup>-1</sup></SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('tan-1')}>tan<sup>-1</sup></SciButton>
-                                        <SciButton variant="function" onClick={() => handleOperator('*' + Math.PI.toString())}>π</SciButton>
-                                        <SciButton variant="function" onClick={() => handleOperator('*' + Math.E.toString())}>e</SciButton>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <SciButton variant="function" onClick={() => handleOperator('**')}>x<sup>y</sup></SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('x3')}>x<sup>3</sup></SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('x2')}>x<sup>2</sup></SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('ex')}>e<sup>x</sup></SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('10x')}>10<sup>x</sup></SciButton>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <SciButton variant="function" onClick={() => handleOperator('**(1/')}><sup>y</sup>√x</SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('cbrt')}><sup>3</sup>√x</SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('sqrt')}>√x</SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('ln')}>ln</SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('log')}>log</SciButton>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <SciButton variant="function" onClick={() => handleOperator('(')}>(</SciButton>
-                                        <SciButton variant="function" onClick={() => handleOperator(')')}>)</SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('1/x')}>1/x</SciButton>
-                                        <SciButton variant="function" onClick={() => handleOperator('/100')}>%</SciButton>
-                                        <SciButton variant="function" onClick={() => handleFunction('factorial')}>n!</SciButton>
+                                    <div className="flex gap-1">
+                                        <button 
+                                            onClick={() => setAngleUnit('Deg')}
+                                            className={`px-3 py-1 text-xs font-medium rounded-lg transition-all ${angleUnit === 'Deg' ? 'bg-primary text-white' : 'bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:bg-slate-200 dark:hover:bg-slate-700'}`}
+                                        >
+                                            DEG
+                                        </button>
+                                        <button 
+                                            onClick={() => setAngleUnit('Rad')}
+                                            className={`px-3 py-1 text-xs font-medium rounded-lg transition-all ${angleUnit === 'Rad' ? 'bg-primary text-white' : 'bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:bg-slate-200 dark:hover:bg-slate-700'}`}
+                                        >
+                                            RAD
+                                        </button>
                                     </div>
                                 </div>
                                 
-                                {/* Numbers & Operators */}
-                                <div className="flex flex-col gap-2">
-                                    <div className="flex gap-2">
-                                        <SciButton variant="number" onClick={() => handleNumber('7')}>7</SciButton>
-                                        <SciButton variant="number" onClick={() => handleNumber('8')}>8</SciButton>
-                                        <SciButton variant="number" onClick={() => handleNumber('9')}>9</SciButton>
-                                        <SciButton variant="operator" onClick={() => handleOperator('+')}>+</SciButton>
-                                        <SciButton variant="operator" onClick={backspace}>←</SciButton>
+                                {showHistory && history.length > 0 && (
+                                    <div className="mb-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl max-h-24 overflow-y-auto">
+                                        {history.map((item, i) => (
+                                            <div key={i} className="text-xs text-muted-foreground truncate py-0.5">{item}</div>
+                                        ))}
                                     </div>
-                                    <div className="flex gap-2">
-                                        <SciButton variant="number" onClick={() => handleNumber('4')}>4</SciButton>
-                                        <SciButton variant="number" onClick={() => handleNumber('5')}>5</SciButton>
-                                        <SciButton variant="number" onClick={() => handleNumber('6')}>6</SciButton>
-                                        <SciButton variant="operator" onClick={() => handleOperator('-')}>−</SciButton>
-                                        <SciButton variant="operator" onClick={() => setDisplay(lastAnswer.toString())}>Ans</SciButton>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <SciButton variant="number" onClick={() => handleNumber('1')}>1</SciButton>
-                                        <SciButton variant="number" onClick={() => handleNumber('2')}>2</SciButton>
-                                        <SciButton variant="number" onClick={() => handleNumber('3')}>3</SciButton>
-                                        <SciButton variant="operator" onClick={() => handleOperator('*')}>×</SciButton>
-                                        <SciButton variant="operator" onClick={() => setMemory(memory + parseFloat(display))}>M+</SciButton>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <SciButton variant="number" onClick={() => handleNumber('0')}>0</SciButton>
-                                        <SciButton variant="number" onClick={() => handleNumber('.')}>.</SciButton>
-                                        <SciButton variant="operator" onClick={() => handleOperator('e')}>EXP</SciButton>
-                                        <SciButton variant="operator" onClick={() => handleOperator('/')}>/</SciButton>
-                                        <SciButton variant="operator" onClick={() => setMemory(memory - parseFloat(display))}>M−</SciButton>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <SciButton variant="operator" onClick={() => handleFunction('±')}>±</SciButton>
-                                        <SciButton variant="operator" onClick={() => setDisplay(Math.random().toString())}>RND</SciButton>
-                                        <SciButton variant="special" onClick={clearAll}>AC</SciButton>
-                                        <SciButton variant="special" onClick={calculate}>=</SciButton>
-                                        <SciButton variant="operator" onClick={() => setDisplay(memory.toString())}>MR</SciButton>
+                                )}
+
+                                <div className="text-right mb-2">
+                                    <div className="h-5 text-sm text-muted-foreground overflow-hidden truncate">{expression || '\u00A0'}</div>
+                                </div>
+                                
+                                <div 
+                                    ref={displayRef}
+                                    className={`relative bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 text-foreground text-right p-4 sm:p-5 rounded-2xl border-2 transition-all duration-300 overflow-x-auto ${
+                                        hasError 
+                                            ? 'border-destructive/50 bg-destructive/5' 
+                                            : resultFlash 
+                                                ? 'border-accent/50 bg-accent/5' 
+                                                : 'border-border/50'
+                                    }`}
+                                >
+                                    <div className={`text-3xl sm:text-4xl font-bold tracking-tight ${hasError ? 'text-destructive' : ''}`}>
+                                        {display}
                                     </div>
                                 </div>
+                                
+                                {hasError && (
+                                    <p className="text-xs text-destructive mt-2 flex items-center gap-1">
+                                        <span className="inline-block w-1 h-1 rounded-full bg-destructive"></span>
+                                        Invalid expression. Please check and try again.
+                                    </p>
+                                )}
+                            </div>
+                            
+                            <div className="grid grid-cols-5 gap-2 mb-3">
+                                <CalcButton variant="function" onClick={() => handleFunction('sin')}>sin</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleFunction('cos')}>cos</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleFunction('tan')}>tan</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleFunction('ln')}>ln</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleFunction('log')}>log</CalcButton>
+                            </div>
+                            
+                            <div className="grid grid-cols-5 gap-2 mb-3">
+                                <CalcButton variant="function" onClick={() => handleFunction('sin-1')}>sin⁻¹</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleFunction('cos-1')}>cos⁻¹</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleFunction('tan-1')}>tan⁻¹</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleFunction('sqrt')}>√</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleFunction('cbrt')}>∛</CalcButton>
+                            </div>
+                            
+                            <div className="grid grid-cols-5 gap-2 mb-3">
+                                <CalcButton variant="function" onClick={() => handleFunction('x2')}>x²</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleFunction('x3')}>x³</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleOperator('**')}>xʸ</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleOperator('*' + Math.PI.toString())}>π</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleOperator('*' + Math.E.toString())}>e</CalcButton>
+                            </div>
+
+                            <div className="h-px bg-border my-4"></div>
+
+                            <div className="grid grid-cols-4 gap-2 sm:gap-3">
+                                <CalcButton variant="action" onClick={clearAll}>AC</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleOperator('(')}>(</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleOperator(')')}>)</CalcButton>
+                                <CalcButton variant="operator" onClick={() => handleOperator('/')}>÷</CalcButton>
+                                
+                                <CalcButton variant="number" onClick={() => handleNumber('7')}>7</CalcButton>
+                                <CalcButton variant="number" onClick={() => handleNumber('8')}>8</CalcButton>
+                                <CalcButton variant="number" onClick={() => handleNumber('9')}>9</CalcButton>
+                                <CalcButton variant="operator" onClick={() => handleOperator('*')}>×</CalcButton>
+                                
+                                <CalcButton variant="number" onClick={() => handleNumber('4')}>4</CalcButton>
+                                <CalcButton variant="number" onClick={() => handleNumber('5')}>5</CalcButton>
+                                <CalcButton variant="number" onClick={() => handleNumber('6')}>6</CalcButton>
+                                <CalcButton variant="operator" onClick={() => handleOperator('-')}>−</CalcButton>
+                                
+                                <CalcButton variant="number" onClick={() => handleNumber('1')}>1</CalcButton>
+                                <CalcButton variant="number" onClick={() => handleNumber('2')}>2</CalcButton>
+                                <CalcButton variant="number" onClick={() => handleNumber('3')}>3</CalcButton>
+                                <CalcButton variant="operator" onClick={() => handleOperator('+')}>+</CalcButton>
+                                
+                                <CalcButton variant="number" onClick={() => handleNumber('0')}>0</CalcButton>
+                                <CalcButton variant="number" onClick={() => handleNumber('.')}>.</CalcButton>
+                                <CalcButton variant="function" onClick={backspace}>
+                                    <Delete className="w-5 h-5" />
+                                </CalcButton>
+                                <CalcButton variant="equals" onClick={calculate}>=</CalcButton>
+                            </div>
+
+                            <div className="grid grid-cols-4 gap-2 sm:gap-3 mt-3">
+                                <CalcButton variant="function" onClick={() => handleFunction('±')}>±</CalcButton>
+                                <CalcButton variant="function" onClick={() => handleOperator('/100')}>%</CalcButton>
+                                <CalcButton variant="function" onClick={() => setDisplay(lastAnswer.toString())}>ANS</CalcButton>
+                                <CalcButton variant="function" onClick={() => setDisplay(memory.toString())}>MR</CalcButton>
                             </div>
                         </div>
                     </div>
 
-                    {/* Search Section */}
-                    <div className="flex-grow w-full lg:w-auto">
-                        <div className="bg-white/60 backdrop-blur-xl p-8 rounded-2xl shadow-xl border border-border/50">
-                            <h2 className="text-2xl font-bold mb-6">Find Your Calculator</h2>
+                    <div className="flex-grow w-full xl:w-auto animate-[slide-up_0.5s_ease-out]">
+                        <div className="bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl shadow-xl border border-border/50">
+                            <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                                <Search className="w-6 h-6 text-primary" />
+                                Find Your Calculator
+                            </h2>
                             <div className="space-y-4" ref={searchRef}>
                                 <div className="relative">
                                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                                     <input
                                         type="text"
-                                        placeholder="Search calculators..."
+                                        placeholder="Search 70+ calculators..."
                                         value={searchQuery}
                                         onChange={handleSearchChange}
                                         onFocus={() => setShowResults(true)}
-                                        className="w-full h-12 bg-white border border-border rounded-xl pl-12 pr-4 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
+                                        className="w-full h-14 bg-slate-50 dark:bg-slate-800 border-2 border-border rounded-xl pl-12 pr-4 text-base focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                     />
                                     {showResults && filteredCalculators.length > 0 && (
-                                        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-border rounded-xl shadow-xl z-50 overflow-hidden">
+                                        <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-border rounded-xl shadow-2xl z-50 overflow-hidden">
                                             {filteredCalculators.map((calc) => (
                                                 <Link
                                                     key={calc.href}
                                                     href={calc.href}
-                                                    className="flex items-center gap-3 px-4 py-3 hover:bg-secondary/50 transition-colors border-b border-border/50 last:border-b-0"
+                                                    className="flex items-center gap-3 px-4 py-3 hover:bg-primary/5 transition-colors border-b border-border/50 last:border-b-0"
                                                     onClick={() => setShowResults(false)}
                                                 >
-                                                    <Search className="w-4 h-4 text-muted-foreground" />
-                                                    <span className="text-sm font-medium">{calc.name}</span>
+                                                    <Search className="w-4 h-4 text-primary" />
+                                                    <span className="font-medium">{calc.name}</span>
                                                 </Link>
                                             ))}
                                         </div>
                                     )}
                                     {showResults && searchQuery.trim() && filteredCalculators.length === 0 && (
-                                        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-border rounded-xl shadow-xl z-50 p-4">
+                                        <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-border rounded-xl shadow-xl z-50 p-4">
                                             <p className="text-sm text-muted-foreground text-center">No calculators found for "{searchQuery}"</p>
                                         </div>
                                     )}
                                 </div>
                             </div>
                             
-                            <div className="mt-8 pt-8 border-t border-border">
-                                <h3 className="text-sm font-semibold text-muted-foreground mb-4">POPULAR SEARCHES</h3>
+                            <div className="mt-8 pt-6 border-t border-border">
+                                <h3 className="text-xs font-semibold text-muted-foreground mb-4 tracking-wider">POPULAR CALCULATORS</h3>
                                 <div className="flex flex-wrap gap-2">
-                                    {['Mortgage', 'BMI', 'Loan', 'Age', 'Percentage'].map((tag) => (
+                                    {['Mortgage', 'BMI', 'Loan', 'Age', 'Percentage', 'Tax'].map((tag) => (
                                         <button 
                                             key={tag} 
                                             onClick={() => handlePopularSearch(tag)}
-                                            className="px-3 py-1.5 bg-secondary text-secondary-foreground text-sm font-medium rounded-lg hover:bg-secondary/80 cursor-pointer transition-colors"
+                                            className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-foreground text-sm font-medium rounded-xl hover:bg-primary hover:text-white transition-all duration-200"
                                         >
                                             {tag}
                                         </button>
                                     ))}
+                                </div>
+                            </div>
+
+                            <div className="mt-8 pt-6 border-t border-border">
+                                <h3 className="text-xs font-semibold text-muted-foreground mb-4 tracking-wider">QUICK ACCESS</h3>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <Link href="/mortgage-calculator" className="flex items-center gap-3 p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl hover:shadow-md transition-all group">
+                                        <div className="w-10 h-10 rounded-lg bg-blue-500 flex items-center justify-center">
+                                            <span className="text-white text-lg">🏠</span>
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-sm group-hover:text-primary transition-colors">Mortgage</p>
+                                            <p className="text-xs text-muted-foreground">Home loans</p>
+                                        </div>
+                                    </Link>
+                                    <Link href="/bmi-calculator" className="flex items-center gap-3 p-4 bg-gradient-to-br from-rose-50 to-rose-100 dark:from-rose-900/20 dark:to-rose-800/20 rounded-xl hover:shadow-md transition-all group">
+                                        <div className="w-10 h-10 rounded-lg bg-rose-500 flex items-center justify-center">
+                                            <span className="text-white text-lg">❤️</span>
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-sm group-hover:text-primary transition-colors">BMI</p>
+                                            <p className="text-xs text-muted-foreground">Health check</p>
+                                        </div>
+                                    </Link>
+                                    <Link href="/loan-calculator" className="flex items-center gap-3 p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 rounded-xl hover:shadow-md transition-all group">
+                                        <div className="w-10 h-10 rounded-lg bg-emerald-500 flex items-center justify-center">
+                                            <span className="text-white text-lg">💰</span>
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-sm group-hover:text-primary transition-colors">Loan</p>
+                                            <p className="text-xs text-muted-foreground">Payments</p>
+                                        </div>
+                                    </Link>
+                                    <Link href="/percentage-calculator" className="flex items-center gap-3 p-4 bg-gradient-to-br from-violet-50 to-violet-100 dark:from-violet-900/20 dark:to-violet-800/20 rounded-xl hover:shadow-md transition-all group">
+                                        <div className="w-10 h-10 rounded-lg bg-violet-500 flex items-center justify-center">
+                                            <span className="text-white text-lg">%</span>
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-sm group-hover:text-primary transition-colors">Percentage</p>
+                                            <p className="text-xs text-muted-foreground">Quick math</p>
+                                        </div>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
